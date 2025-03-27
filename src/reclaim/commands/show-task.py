@@ -63,7 +63,6 @@ class ShowTaskCommand(Command):
             "Status:", f"{state} ({status})",
             "Priority:", task.priority,
         )
-
         grid.add_row(
             "Time required:", str_duration(time_required),
             "Time spent:", str_duration(time_spent),
@@ -91,5 +90,5 @@ class ShowTaskCommand(Command):
 
         # Print table
         console = Console()
-        console.print(f"Task {tid}: {task.title}")
+        console.print(f"[bold]Task {tid}: {task.title}[/bold]")
         console.print(grid)
