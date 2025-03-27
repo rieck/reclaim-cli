@@ -1,3 +1,8 @@
+# Reclaim CLI
+# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+# ---
+# Command to create a task at Reclaim.ai
+
 from .base import Command
 from ..utils import get_task, str_to_id, print_done, parse_duration, str_duration
 
