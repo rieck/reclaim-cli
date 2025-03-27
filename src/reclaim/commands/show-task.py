@@ -11,7 +11,6 @@ from ..utils import get_task, str_to_id, id_to_str, str_task_status, str_duratio
 
 class ShowTaskCommand(Command):
     """Show a task at Reclaim.ai"""
-
     name = "show-task"
     description = "show a task"
     aliases = ["show"]
@@ -46,6 +45,7 @@ class ShowTaskCommand(Command):
         state = str_task_status(task)
         time_required = task.time_chunks_required * 15
         time_spent = task.time_chunks_spent * 15
+        progress = 1 if time_required == 0 else time_spent / time_required
 
         # Get chunk sizes
         min_time = str_duration(task.min_chunk_size * 15)
@@ -69,7 +69,7 @@ class ShowTaskCommand(Command):
         )
         grid.add_row(
             "Chunk size:", f"{min_time} - {max_time}",
-            "Progress:", f"{time_spent / time_required * 100:.0f}%",
+            "Progress:", f"{progress:.0%}",
         )
         grid.add_row(
             "Created:", format_date(task.created),
@@ -90,5 +90,7 @@ class ShowTaskCommand(Command):
 
         # Print table
         console = Console()
-        console.print(f"[bold]Task {tid}: {task.title}[/bold]")
+        console.print(
+            f"Task {tid}: {task.title}", style="bold underline"
+        )
         console.print(grid)

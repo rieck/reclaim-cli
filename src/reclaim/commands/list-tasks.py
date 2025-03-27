@@ -80,7 +80,7 @@ class ListTasksCommand(Command):
         """List (filtered and sorted) tasks."""
         tasks = self.sort_tasks(Task.list(), args)
 
-        grid = Table(box=False)
+        grid = Table(box=False, header_style="bold underline")
 
         grid.add_column("Id")
         grid.add_column("Due")
@@ -101,19 +101,14 @@ class ListTasksCommand(Command):
         """Format and add a task to the grid."""
         short_id = id_to_str(task.id)
         due_date = task.due.strftime("%Y-%m-%d") if task.due else "anytime"
-
-        # Calculate progress metrics
-        if task.time_chunks_required == 0:
-            left, progress = 0, 1
-        else:
-            left = task.time_chunks_remaining
-            progress = task.time_chunks_spent / task.time_chunks_required
-
-        left = str_duration(left * 15)
+        time_required = task.time_chunks_required * 15
+        time_spent = task.time_chunks_spent * 15
+        progress = 1 if time_required == 0 else time_spent / time_required
         status = str_task_status(task)
 
         grid.add_row(
-            short_id, due_date, left, f"{progress:.0%}", status, task.title
+            short_id, due_date, str_duration(time_required - time_spent),
+            f"{progress:.0%}", status, task.title
         )
 
     def filter_task(self, task, args):
