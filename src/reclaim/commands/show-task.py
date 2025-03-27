@@ -48,8 +48,8 @@ class ShowTaskCommand(Command):
         time_spent = task.time_chunks_spent * 15
 
         # Get chunk sizes
-        min_time = str_duration(task.min_chunk_size * 15, align=False)
-        max_time = str_duration(task.max_chunk_size * 15, align=False)
+        min_time = str_duration(task.min_chunk_size * 15)
+        max_time = str_duration(task.max_chunk_size * 15)
 
         def format_date(date):
             if date is None:
@@ -65,8 +65,8 @@ class ShowTaskCommand(Command):
         )
 
         grid.add_row(
-            "Time required:", str_duration(time_required, align=False),
-            "Time spent:", str_duration(time_spent, align=False),
+            "Time required:", str_duration(time_required),
+            "Time spent:", str_duration(time_spent),
         )
         grid.add_row(
             "Chunk size:", f"{min_time} - {max_time}",

@@ -3,6 +3,8 @@
 # ---
 # Command to list tasks at Reclaim.ai
 
+from rich.table import Table
+from rich.console import Console
 from reclaim_sdk.resources.task import Task, TaskStatus
 from .base import Command
 from ..utils import str_to_list, str_to_id, id_to_str, str_duration, str_task_status
@@ -78,13 +80,25 @@ class ListTasksCommand(Command):
         """List (filtered and sorted) tasks."""
         tasks = self.sort_tasks(Task.list(), args)
 
-        print("ID    DUE        LEFT   PROG STATE TILE")
+        grid = Table(box=False)
+
+        grid.add_column("Id")
+        grid.add_column("Due")
+        grid.add_column("Left", justify="right")
+        grid.add_column("Prog", justify="right")
+        grid.add_column("State", justify="center")
+        grid.add_column("Title", justify="left")
+
+        # Print tasks
         for task in tasks:
             if self.filter_task(task, args):
-                self.print_task(task)
+                self.add_task(task, grid)
 
-    def print_task(self, task):
-        """Format and print a single task."""
+        console = Console()
+        console.print(grid)
+
+    def add_task(self, task, grid):
+        """Format and add a task to the grid."""
         short_id = id_to_str(task.id)
         due_date = task.due.strftime("%Y-%m-%d") if task.due else "anytime"
 
@@ -98,8 +112,9 @@ class ListTasksCommand(Command):
         left = str_duration(left * 15)
         status = str_task_status(task)
 
-        print(f"{short_id} {due_date:10} {left} " +
-              f"{progress:4.0%}  {status:4} {task.title:<45}")
+        grid.add_row(
+            short_id, due_date, left, f"{progress:.0%}", status, task.title
+        )
 
     def filter_task(self, task, args):
         """Check if task matches filter criteria."""

@@ -44,5 +44,5 @@ class AddTimeCommand(Command):
         # Add time to task
         mins = parse_duration(args.duration)
         task.add_time(mins / 60) # Expects hours
-        dur = str_duration(mins, align=False)
+        dur = str_duration(mins)
         print_done(f"Added: {dur}", task)

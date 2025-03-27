@@ -113,14 +113,11 @@ def print_done(msg, task):
     print(f"✓ {msg} | Id: {tid} | Title: {task.title}")
 
 
-def str_duration(minutes, align=True):
+def str_duration(minutes):
     """Convert minutes to a duration string"""
     hours = minutes // 60
     minutes = minutes % 60
-    if align:
-        return f"{hours:2}h{minutes:02}m"
-    else:
-        return f"{hours}h{minutes}m"
+    return f"{hours}h{minutes}m"
 
 
 def parse_duration(time_str):
