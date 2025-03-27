@@ -38,12 +38,12 @@ class CreateTaskCommand(Command):
             help="duration of the task", default=None
         )
         subparser.add_argument(
-            "-m", "--min-work-time", type=str, metavar="<duration>",
-            help="min work time of the task", default=None
+            "-m", "--min-chunk-size", type=str, metavar="<duration>",
+            help="minimum chunk size of the task", default=None
         )
         subparser.add_argument(
-            "-M", "--max-work-time", type=str, metavar="<duration>",
-            help="max work time of the task", default=None
+            "-M", "--max-chunk-size", type=str, metavar="<duration>",
+            help="maximum chunk size of the task", default=None
         )
 
         return subparser
@@ -57,7 +57,7 @@ class CreateTaskCommand(Command):
                 raise ValueError(f"Invalid due date: {str(e)}")
 
         if args.priority:
-            priority_num = args.priority.lower().lstrip('p')        
+            priority_num = args.priority.lower().lstrip('p')
             if priority_num not in ['1', '2', '3', '4']:
                 raise ValueError("Priority must be between 1-4")
             args.priority = getattr(TaskPriority, f'P{priority_num}')
@@ -80,10 +80,10 @@ class CreateTaskCommand(Command):
         # Set optional arguments
         if args.duration:
             task.duration = parse_duration(args.duration) / 60
-        if args.min_work_time:
-            task.min_work_duration = parse_duration(args.min_work_time) / 60
-        if args.max_work_time:
-            task.max_work_duration = parse_duration(args.max_work_time) / 60
+        if args.min_chunk_size:
+            task.min_chunk_size = parse_duration(args.min_chunk_size) / 60
+        if args.max_chunk_size:
+            task.max_chunk_size = parse_duration(args.max_chunk_size) / 60
 
         # Save task
         task.save()

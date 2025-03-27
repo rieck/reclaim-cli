@@ -7,8 +7,9 @@ import yaml
 import os
 import argparse
 import re
+from rich.table import Table
 from reclaim_sdk.client import ReclaimClient
-from reclaim_sdk.resources.task import Task
+from reclaim_sdk.resources.task import Task, TaskStatus
 from reclaim_sdk.exceptions import RecordNotFound
 
 
@@ -147,3 +148,26 @@ def parse_duration(time_str):
         time_str = re.sub(pattern, '', time_str)
 
     return minutes
+
+
+def str_task_status(task):
+    """Convert a task status to a string."""
+
+    # Get status character
+    if task.status == TaskStatus.CANCELLED:
+        status = 'X'
+    else:
+        status = task.status[0]
+
+    # Get priority digit
+    prio = task.priority[1]
+
+    # Build status indicators
+    extra = "".join([
+        "!" if task.at_risk else "",
+        ">" if task.deferred else "",
+        "-" if task.deleted else "",
+        "~" if task.adjusted else "",
+    ])
+
+    return f"{status}{prio}{extra}"

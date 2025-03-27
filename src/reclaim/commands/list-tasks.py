@@ -5,7 +5,7 @@
 
 from reclaim_sdk.resources.task import Task, TaskStatus
 from .base import Command
-from ..utils import str_to_list, str_to_id, id_to_str, str_duration
+from ..utils import str_to_list, str_to_id, id_to_str, str_duration, str_task_status
 import dateparser
 
 
@@ -67,7 +67,8 @@ class ListTasksCommand(Command):
 
         # Parse due date
         try:
-            args.due = None if args.due == "all" else dateparser.parse(args.due)
+            args.due = None if args.due == "all" else dateparser.parse(
+                args.due)
         except ValueError as e:
             raise ValueError(f"Invalid due date: {str(e)}")
 
@@ -82,14 +83,8 @@ class ListTasksCommand(Command):
             if self.filter_task(task, args):
                 self.print_task(task)
 
-    def short_task_status(self, status):
-        """Get single character task status."""
-        return 'X' if status == TaskStatus.CANCELLED else status[0]
-
-
-    def print_task(self,task):
+    def print_task(self, task):
         """Format and print a single task."""
-        status = self.short_task_status(task.status)
         short_id = id_to_str(task.id)
         due_date = task.due.strftime("%Y-%m-%d") if task.due else "anytime"
 
@@ -101,18 +96,10 @@ class ListTasksCommand(Command):
             progress = task.time_chunks_spent / task.time_chunks_required
 
         left = str_duration(left * 15)
-        prio = task.priority[1]
+        status = str_task_status(task)
 
-        # Build status indicators
-        extra = "".join([
-            "!" if task.at_risk else "",
-            ">" if task.deferred else "",
-            "-" if task.deleted else "",
-            "~" if task.adjusted else "",
-        ])
-
-        print(f"{short_id} {due_date:10} {left} " + 
-                f"{progress:4.0%}  {status}{prio}{extra:2} {task.title:<45}")
+        print(f"{short_id} {due_date:10} {left} " +
+              f"{progress:4.0%}  {status:4} {task.title:<45}")
 
     def filter_task(self, task, args):
         """Check if task matches filter criteria."""
