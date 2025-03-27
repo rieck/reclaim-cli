@@ -39,11 +39,11 @@ class CreateTaskCommand(Command):
         )
         subparser.add_argument(
             "-m", "--min-chunk-size", type=str, metavar="<duration>",
-            help="minimum chunk size of the task", default=None
+            help="minimum chunk size", default=None
         )
         subparser.add_argument(
             "-M", "--max-chunk-size", type=str, metavar="<duration>",
-            help="maximum chunk size of the task", default=None
+            help="maximum chunk size", default=None
         )
 
         return subparser
@@ -81,9 +81,9 @@ class CreateTaskCommand(Command):
         if args.duration:
             task.duration = parse_duration(args.duration) / 60
         if args.min_chunk_size:
-            task.min_chunk_size = parse_duration(args.min_chunk_size) / 60
+            task.min_chunk_size = int(parse_duration(args.min_chunk_size) / 15)
         if args.max_chunk_size:
-            task.max_chunk_size = parse_duration(args.max_chunk_size) / 60
+            task.max_chunk_size = int(parse_duration(args.max_chunk_size) / 15)
 
         # Save task
         task.save()

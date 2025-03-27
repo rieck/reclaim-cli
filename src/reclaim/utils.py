@@ -47,6 +47,7 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
             return '\n'.join(parts[1:])
         return super()._format_action(action)
 
+
 def load_config(args):
     """Load configuration file"""
     if not os.path.exists(args.config):
@@ -103,7 +104,7 @@ def get_task(task_id):
     except RecordNotFound:
         tid = id_to_str(task_id)
         raise ValueError(f"Task not found: {tid}")
-    
+
     return task
 
 
@@ -126,10 +127,12 @@ def parse_duration(time_str):
 
     # Define regex patterns for time units
     patterns = [
-        ([60], r'(\d+)(?:hr|h|hours)'),  # matches "XXhr", "XXh", or "XXhours"
-        ([1], r'(\d+)(?:min|m)'),        # matches "XXmin" or "XXm"
-        ([60, 1], r'(\d+):(\d+)'),       # matches "XX:XX"
-        ([1], r'(\d+)'),                 # matches "XX"
+        # matches "XXhrs", "XXhr", "XXh", or "XXhours"
+        ([60], r'(\d+)(?:hr(s)?|h|hours)'),
+        # matches "XXmin" or "XXm"
+        ([1], r'(\d+)(?:minute(s)?|min|m)'),
+        ([60, 1], r'(\d+):(\d+)'),
+        ([1], r'(\d+)'),
     ]
 
     minutes = 0
