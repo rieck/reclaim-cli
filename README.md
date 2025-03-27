@@ -55,19 +55,13 @@ options:
   -M <duration>, --max-chunk-size <duration>
                                         maximum chunk size (default: None)
 ```
-Most of the provided options are self-explanatory. 
 
-- Due dates (`--due`) can be specified in different formats, such as `2023-11-11 12:12` or `1. April 2023` as well as relative formats like `in 2 weeks` or `next Friday`.
-
-- For priorities (`-priority`), Reclaim uses a discrete scale from `1` (lowest) to `4` (highest).
-  
-- Task duration (`--duration`) is specified in minutes and supports common time formats, such as `12 minutes`, `4hrs 30min`, or `4:30`.
-
-- The minimum and maximum chunk sizes follow the same time format as durations. These define how the task can be broken up when scheduled.
+Most of the provided options are self-explanatory. Due dates can be specified in different formats, such as `2023-11-11` or `April 1, 2023` as well as relative formats like `in 2 weeks`. For priorities, Reclaim uses a discrete scale from `1` (lowest) to `4` (highest). Task duration is specified in minutes and supports common time formats, such as `12min`, `4h30m`, or `4:30`. The minimum and maximum chunk sizes follow the same time format as durations. These define how the task can be broken up when scheduled.
 
 #### Example
 
 ```sh
-reclaim create-task "Write paper draft" -d Friday -p 2 -D 3h -m 30m -M 1h
+reclaim create-task "Write paper draft" -d "in 4 days" -p 2 -D 4h -m 45m -M 2h
 ```
-This creates a task titled "Write paper draft", due by Friday, with priority 2 , a total duration of 3 hours, and preferred work chunks between 30 minutes and 1 hour.
+
+This creates a task titled "Write paper draft", due in 4 days, with priority 2, a total duration of 3 hours, and preferred work chunks between 45 minutes and 2 hours.

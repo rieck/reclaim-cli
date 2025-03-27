@@ -72,11 +72,11 @@ class ShowTaskCommand(Command):
             "Progress:", f"{progress:.0%}",
         )
         grid.add_row(
-            "Created:", format_date(task.created),
+            "Due date:", format_date(task.due),
             "Snooze:", format_date(task.snooze_until),
         )
         grid.add_row(
-            "Updated:", format_date(task.updated),
+            "Created:", format_date(task.created),
             "Finished:", format_date(task.finished),
         )
         grid.add_row(
