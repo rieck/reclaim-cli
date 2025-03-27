@@ -5,8 +5,8 @@
 
 from reclaim_sdk.resources.task import Task, TaskStatus
 from .base import Command
-from ..utils import str_to_list, str_to_id, id_to_str
-from ..dtfun import parse_date, str_duration
+from ..utils import str_to_list, str_to_id, id_to_str, str_duration
+import dateparser
 
 
 class ListTasksCommand(Command):
@@ -29,7 +29,7 @@ class ListTasksCommand(Command):
             help="filter by task IDs", default="all"
         )
         subparser.add_argument(
-            "-d", "--due", type=str, metavar="<date>",
+            "-d", "--due", type=str, metavar="<datetime>",
             help="filter by due date", default="all"
         )
         subparser.add_argument(
@@ -67,7 +67,7 @@ class ListTasksCommand(Command):
 
         # Parse due date
         try:
-            args.due = None if args.due == "all" else parse_date(args.due)
+            args.due = None if args.due == "all" else dateparser.parse(args.due)
         except ValueError as e:
             raise ValueError(f"Invalid due date: {str(e)}")
 

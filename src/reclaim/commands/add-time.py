@@ -1,6 +1,5 @@
 from .base import Command
-from ..utils import get_task, str_to_id, print_done
-from ..dtfun import parse_duration, str_duration
+from ..utils import get_task, str_to_id, print_done, parse_duration, str_duration
 
 
 class AddTimeCommand(Command):

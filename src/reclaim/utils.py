@@ -3,11 +3,10 @@
 # ---
 # Utility functions
 
-
 import yaml
 import os
 import argparse
-
+import re
 from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.resources.task import Task
 from reclaim_sdk.exceptions import RecordNotFound
@@ -111,3 +110,40 @@ def print_done(msg, task):
     """Print a message with the task id and title."""
     tid = id_to_str(task.id)
     print(f"✓ {msg} | Id: {tid} | Title: {task.title}")
+
+
+def str_duration(minutes, align=True):
+    """Convert minutes to a duration string"""
+    hours = minutes // 60
+    minutes = minutes % 60
+    if align:
+        return f"{hours:2}h{minutes:02}m"
+    else:
+        return f"{hours}h{minutes}m"
+
+
+def parse_duration(time_str):
+    """Parse a duration string into minutes """
+    time_str = time_str.lower().replace(' ', '')
+
+    # Define regex patterns for time units
+    patterns = [
+        ([60], r'(\d+)(?:hr|h|hours)'),  # matches "XXhr", "XXh", or "XXhours"
+        ([1], r'(\d+)(?:min|m)'),        # matches "XXmin" or "XXm"
+        ([60, 1], r'(\d+):(\d+)'),       # matches "XX:XX"
+        ([1], r'(\d+)'),                 # matches "XX"
+    ]
+
+    minutes = 0
+    for units, pattern in patterns:
+        match = re.search(pattern, time_str)
+        if not match:
+            continue
+
+        # Loop over units and groups
+        groups = match.groups()
+        for i, unit in enumerate(units):
+            minutes += unit * int(groups[i])
+        time_str = re.sub(pattern, '', time_str)
+
+    return minutes

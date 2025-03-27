@@ -1,3 +1,4 @@
 PyYAML>=6.0
+dateparser==1.2.1
 # reclaim-sdk>=0.6.3 -- This needs to be patched. 
 git+https://github.com/rieck/reclaim-sdk@all-patches

@@ -4,8 +4,8 @@
 # Command to log work to a task at Reclaim.ai
 
 from .base import Command
-from ..utils import get_task, str_to_id, print_done
-from ..dtfun import parse_duration, str_duration, parse_datetime
+from ..utils import get_task, str_to_id, print_done, parse_duration, str_duration
+import dateparser
 
 
 class LogWorkCommand(Command):
@@ -41,7 +41,7 @@ class LogWorkCommand(Command):
             raise ValueError(f"Invalid task ID: {str(e)}")
 
         try:
-            args.log_time = parse_datetime(args.log_time)
+            args.log_time = dateparser.parse(args.log_time)
         except ValueError as e:
             raise ValueError(f"Invalid log time: {str(e)}")
         return args
