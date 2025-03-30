@@ -53,3 +53,4 @@ class MarkTaskCommand(Command):
             task.mark_incomplete()
 
         print_done(f"Marked: {args.mark}", task)
+        return task

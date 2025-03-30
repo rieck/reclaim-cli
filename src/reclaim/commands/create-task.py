@@ -103,3 +103,4 @@ class CreateTaskCommand(Command):
         # Save task
         task.save()
         print_done(f"Created", task)
+        return task

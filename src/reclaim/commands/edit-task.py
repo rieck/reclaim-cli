@@ -105,3 +105,4 @@ class EditTaskCommand(Command):
 
         task.save()
         print_done(f"Edited", task)
+        return task

@@ -54,4 +54,6 @@ class LogWorkCommand(Command):
         mins = parse_duration(args.duration)
         task.log_work(mins, end=args.log_time) # Expects minutes
         dur = str_duration(mins)
+
         print_done(f"Logged: {dur}", task)
+        return task

@@ -94,3 +94,4 @@ class ShowTaskCommand(Command):
             f"Task {tid}: {task.title}", style="bold underline"
         )
         console.print(grid)
+        return task

@@ -51,3 +51,4 @@ class StartTaskCommand(Command):
             # Start task immediately
             task.start()
             print_done(f"Started", task)
+        return task

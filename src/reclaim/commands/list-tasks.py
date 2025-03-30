@@ -90,12 +90,15 @@ class ListTasksCommand(Command):
         grid.add_column("Title", justify="left")
 
         # Print tasks
+        output = []
         for task in tasks:
             if self.filter_task(task, args):
+                output.append(task)
                 self.add_task(task, grid)
 
         console = Console()
         console.print(grid)
+        return output
 
     def add_task(self, task, grid):
         """Format and add a task to the grid."""

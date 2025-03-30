@@ -40,3 +40,4 @@ class StopTaskCommand(Command):
         # Stop task
         task.stop()
         print_done(f"Stopped", task)
+        return task

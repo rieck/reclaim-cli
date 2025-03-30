@@ -39,3 +39,4 @@ class DeleteTaskCommand(Command):
             # Delete task
             task.delete()
             print_done(f"Deleted", task)
+        return None
