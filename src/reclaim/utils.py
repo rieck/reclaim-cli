@@ -147,6 +147,9 @@ def parse_duration(time_str):
             minutes += unit * int(groups[i])
         time_str = re.sub(pattern, '', time_str)
 
+    if minutes <= 0:
+        raise ValueError("No or negative duration")
+
     return minutes
 
 

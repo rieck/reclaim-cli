@@ -1,30 +1,34 @@
 # Reclaim CLI
 # Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 # ---
-# Command to create a task at Reclaim.ai
+# Command to edit a task at Reclaim.ai
 
-from reclaim_sdk.resources.task import Task, TaskPriority
+from reclaim_sdk.resources.task import TaskPriority
 from .base import Command
-from ..utils import print_done, parse_duration
+from ..utils import get_task, str_to_id, print_done, parse_duration
 import dateparser
 
 
-class CreateTaskCommand(Command):
-    """Create a task at Reclaim.ai"""
+class EditTaskCommand(Command):
+    """Edit task at Reclaim.ai"""
 
-    name = "create-task"
-    description = "create a task"
-    aliases = ["create"]
+    name = "edit-task"
+    description = "edit a task"
+    aliases = ["edit"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "title", type=str, metavar="<title>",
-            help="title of the task"
+            "id", type=str, metavar="<id>",
+            help="task id to start"
         )
 
+        subparser.add_argument(
+            "-t", "--title", type=str, metavar="<title>",
+            help="title of the task", default=None
+        )
         subparser.add_argument(
             "-d", "--due", type=str, metavar="<datetime>",
             help="due date of the task", default=None
@@ -45,17 +49,20 @@ class CreateTaskCommand(Command):
             "-M", "--max-chunk-size", type=str, metavar="<duration>",
             help="maximum chunk size", default=None
         )
-
         return subparser
 
     def validate_args(self, args):
         """Check and convert command line arguments."""
+        try:
+            args.id = str_to_id(args.id)
+        except ValueError as e:
+            raise ValueError(f"Invalid task ID: {str(e)}")
+
         if args.due:
             try:
                 args.due = dateparser.parse(args.due)
             except ValueError as e:
                 raise ValueError(f"Invalid due date: {str(e)}")
-
         if args.priority:
             priority_num = args.priority.lower().lstrip('p')
             if priority_num not in ['1', '2', '3', '4']:
@@ -80,26 +87,21 @@ class CreateTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Create task at Reclaim.ai"""
-        task_args = {'title': args.title}
+        """Start task at Reclaim.ai"""
+        task = get_task(args.id)
 
-        # Prepare optional arguments
+        if args.title:
+            task.title = args.title
         if args.due:
-            task_args['due'] = args.due
+            task.due = args.due
         if args.priority:
-            task_args['priority'] = args.priority
-
-        # Create task and save it
-        task = Task(**task_args)
-
-        # Set optional arguments
+            task.priority = args.priority
         if args.duration:
             task.duration = args.duration / 60  # Hours
         if args.min_chunk_size:
-            task.min_chunk_size = int(args.min_chunk_size / 15)  # Chunks
+            task.min_chunk_size = int(args.min_chunksize / 15)  # Chunks
         if args.max_chunk_size:
-            task.max_chunk_size = int(args.max_chunk_size / 15)  # Chunks
+            task.max_chunk_size = int(args.max_chunksize / 15)  # Chunks
 
-        # Save task
         task.save()
-        print_done(f"Created", task)
+        print_done(f"Edited", task)
