@@ -49,6 +49,10 @@ class EditTaskCommand(Command):
             "-M", "--max-chunk-size", type=str, metavar="<duration>",
             help="maximum chunk size", default=None
         )
+        subparser.add_argument(
+            "-s", "--snooze-until", type=str, metavar="<datetime>",
+            help="snooze until", default=None
+        )
         return subparser
 
     def validate_args(self, args):
@@ -57,6 +61,10 @@ class EditTaskCommand(Command):
             args.id = str_to_id(args.id)
         except ValueError as e:
             raise ValueError(f"Invalid task ID: {str(e)}")
+        try:
+            args.snooze_until = dateparser.parse(args.snooze_until)
+        except ValueError as e:
+            raise ValueError(f"Invalid snooze until: {str(e)}")
 
         if args.due:
             try:
@@ -94,6 +102,8 @@ class EditTaskCommand(Command):
             task.title = args.title
         if args.due:
             task.due = args.due
+        if args.snooze_until:
+            task.snooze_until = args.snooze_until
         if args.priority:
             task.priority = args.priority
         if args.duration:

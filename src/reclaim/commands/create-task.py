@@ -45,6 +45,10 @@ class CreateTaskCommand(Command):
             "-M", "--max-chunk-size", type=str, metavar="<duration>",
             help="maximum chunk size", default=None
         )
+        subparser.add_argument(
+            "-s", "--snooze-until", type=str, metavar="<datetime>",
+            help="snooze until", default=None
+        )
 
         return subparser
 
@@ -55,7 +59,11 @@ class CreateTaskCommand(Command):
                 args.due = dateparser.parse(args.due)
             except ValueError as e:
                 raise ValueError(f"Invalid due date: {str(e)}")
-
+        if args.snooze_until:
+            try:
+                args.snooze_until = dateparser.parse(args.snooze_until)
+            except ValueError as e:
+                raise ValueError(f"Invalid due date: {str(e)}")
         if args.priority:
             priority_num = args.priority.lower().lstrip('p')
             if priority_num not in ['1', '2', '3', '4']:
@@ -86,6 +94,8 @@ class CreateTaskCommand(Command):
         # Prepare optional arguments
         if args.due:
             task_args['due'] = args.due
+        if args.snooze_until:
+            task_args['snooze_until'] = args.snooze_until
         if args.priority:
             task_args['priority'] = args.priority
 
