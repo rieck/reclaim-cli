@@ -6,3 +6,6 @@
 - [X] Implement `show` command to show all about a task
 - [X] Implement `edit` command to change a task
 - [X] Check out `rich` package for display functions
+- [ ] Implement some test cases
+- [ ] Improve packaging and maintance scripts
+
