@@ -95,7 +95,7 @@ class CreateTaskCommand(Command):
         if args.due:
             task_args['due'] = args.due
         if args.snooze_until:
-            task_args['snooze_until'] = args.snooze_until
+            task_args['snoozeUntil'] = args.snooze_until
         if args.priority:
             task_args['priority'] = args.priority
 
