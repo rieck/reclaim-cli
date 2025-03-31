@@ -99,9 +99,9 @@ class EditTaskCommand(Command):
         if args.duration:
             task.duration = args.duration / 60  # Hours
         if args.min_chunk_size:
-            task.min_chunk_size = int(args.min_chunksize / 15)  # Chunks
+            task.min_chunk_size = int(args.min_chunk_size / 15)  # Chunks
         if args.max_chunk_size:
-            task.max_chunk_size = int(args.max_chunksize / 15)  # Chunks
+            task.max_chunk_size = int(args.max_chunk_size / 15)  # Chunks
 
         task.save()
         print_done(f"Edited", task)
