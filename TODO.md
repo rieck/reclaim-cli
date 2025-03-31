@@ -8,4 +8,4 @@
 - [X] Check out `rich` package for display functions
 - [ ] Implement some test cases
 - [ ] Improve packaging and maintance scripts
-
+- [ ] Implement load estimation (this week, next week, ...)
