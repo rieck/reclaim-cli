@@ -52,7 +52,7 @@ def test_create_task(commands):
         due="in 7 days",
         snooze_until="in 2 days",
         priority="P3",
-        duration="2h15",
+        duration="2h15m",
         min_chunk_size="1h",
         max_chunk_size="2h",
     )
@@ -93,7 +93,7 @@ def test_edit_task(commands, test_task):
         due="in 7 days",
         snooze_until="in 2 days",
         priority="P3",
-        duration="2h15",
+        duration="2h30m",
         min_chunk_size="1h",
         max_chunk_size="2h",
     )
