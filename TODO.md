@@ -6,8 +6,7 @@
 - [X] Implement `show` command to show all about a task
 - [X] Implement `edit` command to change a task
 - [X] Check out `rich` package for display functions
-- [ ] Implement some test cases
-- [ ] Improve packaging and maintance scripts
+- [x] Implement some test cases
+- [x] Improve packaging and maintance scripts
 - [ ] Implement load estimation (this week, next week, ...)
 - [ ] Detect incorrect dates
-
