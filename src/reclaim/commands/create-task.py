@@ -75,6 +75,13 @@ class CreateTaskCommand(Command):
 
         return subparser
 
+    def validate_args(self, args):
+        """Validate and transform command arguments."""
+        args = super().validate_args(args)
+
+        # Add custom checks here
+        return args
+
     def run(self, args):
         """Create task at Reclaim.ai"""
         task_args = {"title": args.title}
