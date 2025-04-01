@@ -191,7 +191,7 @@ def str_task_status(task):
 
 def parse_priority(priority):
     """Parse a priority string into a priority object."""
-    if priority.lower().startswith("p"):
+    if priority.startswith("P") or priority.lower().startswith("p"):
         priority = priority[1:]
     if not priority.isdigit():
         raise ValueError(f"Invalid priority: {priority}")

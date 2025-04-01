@@ -24,8 +24,9 @@ packages = ["reclaim", "reclaim.commands"]
 # Testing configuration
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-v --cov=reclaim"
 filterwarnings = [
-    "ignore::DeprecationWarning:pydantic.*",
+    "ignore::DeprecationWarning:pydantic.*"
 ]
 
 # Type checking
