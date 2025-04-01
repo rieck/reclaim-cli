@@ -41,7 +41,8 @@ Each command follows a consistent pattern and can be extended with its own optio
 The command `create-task` (or short `create`) is used to define a new task at [Reclaim.ai](https:/reclaim.ai) and optionally specify its scheduling preferences. At minimum, it requires a `title`, but you can also provide additional data to help Reclaim.ai plan the task effectively.
 
 ```sh
-reclaim create-task <title> [options]
+usage: reclaim create-task [options] <title>
+
 positional arguments:
   <title>                               title of the task
 
@@ -54,6 +55,8 @@ options:
                                         minimum chunk size (default: None)
   -M <duration>, --max-chunk-size <duration>
                                         maximum chunk size (default: None)
+  -s <datetime>, --snooze-until <datetime>
+                                        snooze until (default: None)
 ```
 
 Most of the provided options are self-explanatory. Due dates can be specified in different formats, such as `2023-11-11` or `April 1, 2023` as well as relative formats like `in 2 weeks`. For priorities, Reclaim uses a discrete scale from `1` (lowest) to `4` (highest). Task duration is specified in minutes and supports common time formats, such as `12min`, `4h30m`, or `4:30`. The minimum and maximum chunk sizes follow the same time format as durations. These define how the task can be broken up when scheduled.
@@ -62,7 +65,6 @@ Most of the provided options are self-explanatory. Due dates can be specified in
 
 ```sh
 reclaim create-task "Write paper draft" -d "in 4 days" -p 2 -D 4h -m 45m -M 2h
-✓ Created | Id: 5fte1 | Title: Write paper draft
 ```
 
 This creates a task titled "Write paper draft", due in 4 days, with priority 2, a total duration of 3 hours, and preferred work chunks between 45 minutes and 2 hours.
@@ -72,7 +74,8 @@ This creates a task titled "Write paper draft", due in 4 days, with priority 2, 
 The command `list-tasks` (or short `list`) displays an overview of all tasks currently managed by your Reclaim account. By default, this includes tasks that are in progress, scheduled, or pending scheduling. You can use this command to filter tasks by their status or due date.
 
 ```sh
-reclaim list-tasks [options]
+usage: reclaim list-tasks [options]
+
 options:
   -h, --help                       show this help message and exit
   -s <list>, --status <list>       filter by status (default: active)
@@ -87,10 +90,6 @@ The supported statuses are "active", "in_progress", "scheduled", "new", "complet
 
 ```sh
 reclaim list-tasks -s scheduled,new -o state
- Id     Due          Left  Prog  State  Title          
- 58oji  2025-07-09  10h0m    0%   N3    Reviews S&P (C1R1)        
- 5fds0  2025-04-03   1h0m    0%   S3!   Final SaTML planning      
- 5fte1  2025-04-05   4h0m    0%   N2!   Write paper draft         
 ```
 
 This lists all tasks that are "in_progress" or "scheduled", sorted by their remaining time. Each task is identified by a short string ID.
@@ -100,7 +99,8 @@ This lists all tasks that are "in_progress" or "scheduled", sorted by their rema
 The command `delete-task` (or short `delete`) allows you to permanently remove a task from Reclaim.ai. Since this is a destructive operation and deleted tasks cannot be recovered, it should be used with caution.
 
 ```sh
-reclaim delete-task <id> [options]
+usage: reclaim delete-task [options] <id>
+
 positional arguments:
   <id>        task id to delete
 
@@ -114,7 +114,6 @@ The task to be deleted is identified by its short string ID, which can be obtain
 
 ```sh
 reclaim delete-task 5fte1
-✓ Deleted | Id: 5fte1 | Title: Write paper draft
 ```
 
 This permanently removes the specified task from your Reclaim.ai account.

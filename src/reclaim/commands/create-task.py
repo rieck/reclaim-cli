@@ -36,7 +36,7 @@ class CreateTaskCommand(Command):
             "-p",
             "--priority",
             type=str,
-            metavar="<priolrity>",
+            metavar="<priority>",
             help="priority of the task",
             default=None,
         )
