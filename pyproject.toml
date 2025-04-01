@@ -1,3 +1,56 @@
 [build-system]
+requires = ["setuptools>=45"]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "wheel"]
+
+[project]
+name = "reclaim-cli"
+version = "0.1.0"
+description = "CLI for Reclaim.ai service"
+requires-python = ">=3.8"
+dependencies = [
+    "PyYAML>=6.0",
+    "dateparser==1.2.1",
+    "rich==13.9.4",
+    "reclaim-sdk>=0.6.3",
+]
+
+[project.scripts]
+reclaim = "reclaim.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["reclaim", "reclaim.commands"]
+
+# Testing configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:pydantic.*",
+]
+
+# Type checking
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+# Code formatting
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+# Import sorting
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "isort>=5.0",
+    "mypy>=1.0",
+]

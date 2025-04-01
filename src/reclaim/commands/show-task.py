@@ -3,14 +3,16 @@
 # ---
 # Command to show a task at Reclaim.ai
 
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
+
+from ..utils import get_task, id_to_str, str_duration, str_task_status, str_to_id
 from .base import Command
-from ..utils import get_task, str_to_id, id_to_str, str_task_status, str_duration
 
 
 class ShowTaskCommand(Command):
     """Show a task at Reclaim.ai"""
+
     name = "show-task"
     description = "show a task"
     aliases = ["show"]
@@ -20,8 +22,7 @@ class ShowTaskCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "id", type=str, metavar="<id>",
-            help="task id to add time to"
+            "id", type=str, metavar="<id>", help="task id to add time to"
         )
 
         return subparser
@@ -49,41 +50,54 @@ class ShowTaskCommand(Command):
             return date.strftime("%Y-%m-%d %H:%M")
 
         grid = Table.grid(
-            padding=(0, 3), pad_edge=True,
+            padding=(0, 3),
+            pad_edge=True,
         )
         grid.add_row(
-            "Status:", f"{state} ({status})",
-            "Priority:", task.priority,
+            "Status:",
+            f"{state} ({status})",
+            "Priority:",
+            task.priority,
         )
         grid.add_row(
-            "Time required:", str_duration(time_required),
-            "Time spent:", str_duration(time_spent),
+            "Time required:",
+            str_duration(time_required),
+            "Time spent:",
+            str_duration(time_spent),
         )
         grid.add_row(
-            "Chunk size:", f"{min_time} - {max_time}",
-            "Progress:", f"{progress:.0%}",
+            "Chunk size:",
+            f"{min_time} - {max_time}",
+            "Progress:",
+            f"{progress:.0%}",
         )
         grid.add_row(
-            "Due date:", format_date(task.due),
-            "Snooze:", format_date(task.snooze_until),
+            "Due date:",
+            format_date(task.due),
+            "Snooze:",
+            format_date(task.snooze_until),
         )
         grid.add_row(
-            "Created:", format_date(task.created),
-            "Finished:", format_date(task.finished),
+            "Created:",
+            format_date(task.created),
+            "Finished:",
+            format_date(task.finished),
         )
         grid.add_row(
-            "At risk:", "yes" if task.at_risk else "no",
-            "On deck:", "yes" if task.on_deck else "no"
+            "At risk:",
+            "yes" if task.at_risk else "no",
+            "On deck:",
+            "yes" if task.on_deck else "no",
         )
         grid.add_row(
-            "Adjusted:", "yes" if task.adjusted else "no",
-            "Deferred:", "yes" if task.deferred else "no",
+            "Adjusted:",
+            "yes" if task.adjusted else "no",
+            "Deferred:",
+            "yes" if task.deferred else "no",
         )
 
         # Print table
         console = Console()
-        console.print(
-            f"Task {tid}: {task.title}", style="bold underline"
-        )
+        console.print(f"Task {tid}: {task.title}", style="bold underline")
         console.print(grid)
         return task

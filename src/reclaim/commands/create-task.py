@@ -4,8 +4,9 @@
 # Command to create a task at Reclaim.ai
 
 from reclaim_sdk.resources.task import Task, TaskPriority
+
+from ..utils import parse_datetime, parse_duration, print_done
 from .base import Command
-from ..utils import print_done, parse_duration, parse_datetime
 
 
 class CreateTaskCommand(Command):
@@ -20,48 +21,71 @@ class CreateTaskCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "title", type=str, metavar="<title>",
-            help="title of the task"
+            "title", type=str, metavar="<title>", help="title of the task"
         )
 
         subparser.add_argument(
-            "-d", "--due", type=str, metavar="<datetime>",
-            help="due date of the task", default=None
+            "-d",
+            "--due",
+            type=str,
+            metavar="<datetime>",
+            help="due date of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-p", "--priority", type=str, metavar="<priority>",
-            help="priority of the task", default=None
+            "-p",
+            "--priority",
+            type=str,
+            metavar="<priority>",
+            help="priority of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-D", "--duration", type=str, metavar="<duration>",
-            help="duration of the task", default=None
+            "-D",
+            "--duration",
+            type=str,
+            metavar="<duration>",
+            help="duration of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-m", "--min-chunk-size", type=str, metavar="<duration>",
-            help="minimum chunk size", default=None
+            "-m",
+            "--min-chunk-size",
+            type=str,
+            metavar="<duration>",
+            help="minimum chunk size",
+            default=None,
         )
         subparser.add_argument(
-            "-M", "--max-chunk-size", type=str, metavar="<duration>",
-            help="maximum chunk size", default=None
+            "-M",
+            "--max-chunk-size",
+            type=str,
+            metavar="<duration>",
+            help="maximum chunk size",
+            default=None,
         )
         subparser.add_argument(
-            "-s", "--snooze-until", type=str, metavar="<datetime>",
-            help="snooze until", default=None
+            "-s",
+            "--snooze-until",
+            type=str,
+            metavar="<datetime>",
+            help="snooze until",
+            default=None,
         )
 
         return subparser
 
     def run(self, args):
         """Create task at Reclaim.ai"""
-        task_args = {'title': args.title}
+        task_args = {"title": args.title}
 
         # Prepare optional arguments
         if args.due:
-            task_args['due'] = args.due
+            task_args["due"] = args.due
         if args.snooze_until:
-            task_args['snoozeUntil'] = args.snooze_until
+            task_args["snoozeUntil"] = args.snooze_until
         if args.priority:
-            task_args['priority'] = args.priority
+            task_args["priority"] = args.priority
 
         # Create task and save it
         task = Task(**task_args)

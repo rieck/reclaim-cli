@@ -4,8 +4,9 @@
 # Command to edit a task at Reclaim.ai
 
 from reclaim_sdk.resources.task import TaskPriority
+
+from ..utils import get_task, parse_datetime, parse_duration, print_done, str_to_id
 from .base import Command
-from ..utils import get_task, str_to_id, print_done, parse_duration, parse_datetime
 
 
 class EditTaskCommand(Command):
@@ -19,38 +20,63 @@ class EditTaskCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
-        subparser.add_argument(
-            "id", type=str, metavar="<id>",
-            help="task id to start"
-        )
+        subparser.add_argument("id", type=str, metavar="<id>", help="task id to start")
 
         subparser.add_argument(
-            "-t", "--title", type=str, metavar="<title>",
-            help="title of the task", default=None
+            "-t",
+            "--title",
+            type=str,
+            metavar="<title>",
+            help="title of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-d", "--due", type=str, metavar="<datetime>",
-            help="due date of the task", default=None
+            "-d",
+            "--due",
+            type=str,
+            metavar="<datetime>",
+            help="due date of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-p", "--priority", type=str, metavar="<priority>",
-            help="priority of the task", default=None
+            "-p",
+            "--priority",
+            type=str,
+            metavar="<priority>",
+            help="priority of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-D", "--duration", type=str, metavar="<duration>",
-            help="duration of the task", default=None
+            "-D",
+            "--duration",
+            type=str,
+            metavar="<duration>",
+            help="duration of the task",
+            default=None,
         )
         subparser.add_argument(
-            "-m", "--min-chunk-size", type=str, metavar="<duration>",
-            help="minimum chunk size", default=None
+            "-m",
+            "--min-chunk-size",
+            type=str,
+            metavar="<duration>",
+            help="minimum chunk size",
+            default=None,
         )
         subparser.add_argument(
-            "-M", "--max-chunk-size", type=str, metavar="<duration>",
-            help="maximum chunk size", default=None
+            "-M",
+            "--max-chunk-size",
+            type=str,
+            metavar="<duration>",
+            help="maximum chunk size",
+            default=None,
         )
         subparser.add_argument(
-            "-s", "--snooze-until", type=str, metavar="<datetime>",
-            help="snooze until", default=None
+            "-s",
+            "--snooze-until",
+            type=str,
+            metavar="<datetime>",
+            help="snooze until",
+            default=None,
         )
         return subparser
 

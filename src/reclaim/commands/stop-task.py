@@ -3,8 +3,8 @@
 # ---
 # Command to stop a task at Reclaim.ai
 
+from ..utils import get_task, print_done, str_to_id
 from .base import Command
-from ..utils import get_task, str_to_id, print_done
 
 
 class StopTaskCommand(Command):
@@ -18,17 +18,14 @@ class StopTaskCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
-        subparser.add_argument(
-            "id", type=str, metavar="<id>",
-            help="task id to stop"
-        )
+        subparser.add_argument("id", type=str, metavar="<id>", help="task id to stop")
 
         return subparser
 
     def run(self, args):
         """Stop task at Reclaim.ai"""
         task = get_task(args.id)
-        
+
         # Stop task
         task.stop()
         print_done(f"Stopped", task)

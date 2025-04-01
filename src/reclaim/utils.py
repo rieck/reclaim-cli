@@ -3,16 +3,16 @@
 # ---
 # Utility functions
 
-import yaml
-import os
 import argparse
+import os
 import re
-import dateparser
-from rich.table import Table
-from reclaim_sdk.client import ReclaimClient
-from reclaim_sdk.resources.task import Task, TaskStatus
-from reclaim_sdk.exceptions import RecordNotFound
 
+import dateparser
+import yaml
+from reclaim_sdk.client import ReclaimClient
+from reclaim_sdk.exceptions import RecordNotFound
+from reclaim_sdk.resources.task import Task, TaskStatus
+from rich.table import Table
 
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -26,7 +26,7 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
 
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
-            prefix = 'usage: '
+            prefix = "usage: "
 
         # Find the subparser action
         subparser_action = None
@@ -44,8 +44,8 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
     def _format_action(self, action):
         if isinstance(action, argparse._SubParsersAction):
             # Get the original format but remove the first line
-            parts = super()._format_action(action).split('\n')
-            return '\n'.join(parts[1:])
+            parts = super()._format_action(action).split("\n")
+            return "\n".join(parts[1:])
         return super()._format_action(action)
 
 
@@ -65,10 +65,10 @@ def load_config(args):
 def set_api_key(cfg):
     """Set the API key in the configuration file."""
     token = None
-    if hasattr(cfg, 'reclaim_token'):
+    if hasattr(cfg, "reclaim_token"):
         token = cfg.reclaim_token
-    elif os.environ.get('RECLAIM_TOKEN'):
-        token = os.environ.get('RECLAIM_TOKEN')
+    elif os.environ.get("RECLAIM_TOKEN"):
+        token = os.environ.get("RECLAIM_TOKEN")
     if not token:
         raise Exception("No Reclaim API token set")
     ReclaimClient.configure(token=token)
@@ -126,17 +126,17 @@ def str_duration(minutes):
 
 
 def parse_duration(time_str):
-    """Parse a duration string into minutes """
-    time_str = time_str.lower().replace(' ', '')
+    """Parse a duration string into minutes"""
+    time_str = time_str.lower().replace(" ", "")
 
     # Define regex patterns for time units
     patterns = [
         # matches "XXhrs", "XXhr", "XXh", or "XXhours"
-        ([60], r'(\d+)(?:hr(s)?|h|hours)'),
+        ([60], r"(\d+)(?:hr(s)?|h|hours)"),
         # matches "XXmin" or "XXm"
-        ([1], r'(\d+)(?:minute(s)?|min|m)'),
-        ([60, 1], r'(\d+):(\d+)'),
-        ([1], r'(\d+)'),
+        ([1], r"(\d+)(?:minute(s)?|min|m)"),
+        ([60, 1], r"(\d+):(\d+)"),
+        ([1], r"(\d+)"),
     ]
 
     minutes = 0
@@ -149,7 +149,7 @@ def parse_duration(time_str):
         groups = match.groups()
         for i, unit in enumerate(units):
             minutes += unit * int(groups[i])
-        time_str = re.sub(pattern, '', time_str)
+        time_str = re.sub(pattern, "", time_str)
 
     if minutes <= 0:
         raise ValueError("No or negative duration")
@@ -170,7 +170,7 @@ def str_task_status(task):
 
     # Get status character
     if task.status == TaskStatus.CANCELLED:
-        status = 'X'
+        status = "X"
     else:
         status = task.status[0]
 
@@ -178,19 +178,21 @@ def str_task_status(task):
     prio = task.priority[1]
 
     # Build status indicators
-    extra = "".join([
-        "!" if task.at_risk else "",
-        ">" if task.deferred else "",
-        "-" if task.deleted else "",
-        "~" if task.adjusted else "",
-    ])
+    extra = "".join(
+        [
+            "!" if task.at_risk else "",
+            ">" if task.deferred else "",
+            "-" if task.deleted else "",
+            "~" if task.adjusted else "",
+        ]
+    )
 
     return f"{status}{prio}{extra}"
 
 
 def parse_priority(priority):
     """Parse a priority string into a priority object."""
-    if priority.lower().startswith('p'):
+    if priority.lower().startswith("p"):
         priority = priority[1:]
     if not priority.isdigit():
         raise ValueError(f"Invalid priority: {priority}")

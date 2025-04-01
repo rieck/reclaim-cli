@@ -3,8 +3,8 @@
 # ---
 # Command to mark a task as complete or incomplete
 
+from ..utils import get_task, print_done, str_to_id
 from .base import Command
-from ..utils import get_task, str_to_id, print_done
 
 
 class MarkTaskCommand(Command):
@@ -19,12 +19,14 @@ class MarkTaskCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "id", type=str, metavar="<id>",
-            help="task id to add time to"
+            "id", type=str, metavar="<id>", help="task id to add time to"
         )
         subparser.add_argument(
-            "mark", type=str, metavar="<mark>", default="complete",
-            help="mark to set: complete, incomplete"
+            "mark",
+            type=str,
+            metavar="<mark>",
+            default="complete",
+            help="mark to set: complete, incomplete",
         )
 
         return subparser
@@ -32,7 +34,7 @@ class MarkTaskCommand(Command):
     def validate_args(self, args):
         """Check and convert command line arguments."""
         super().validate_args(args)
-        
+
         available_marks = ["complete", "incomplete"]
         if args.mark not in available_marks:
             raise ValueError(f"Invalid mark: Must be {available_marks}")

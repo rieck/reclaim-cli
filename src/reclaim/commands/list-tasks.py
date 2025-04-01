@@ -3,11 +3,12 @@
 # ---
 # Command to list tasks at Reclaim.ai
 
-from rich.table import Table
-from rich.console import Console
 from reclaim_sdk.resources.task import Task, TaskStatus
+from rich.console import Console
+from rich.table import Table
+
+from ..utils import id_to_str, str_duration, str_task_status, str_to_list
 from .base import Command
-from ..utils import str_to_list, id_to_str, str_duration, str_task_status
 
 
 class ListTasksCommand(Command):
@@ -22,24 +23,30 @@ class ListTasksCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "-s", "--status", type=str, metavar="<list>",
-            help="filter by status", default="active"
+            "-s",
+            "--status",
+            type=str,
+            metavar="<list>",
+            help="filter by status",
+            default="active",
         )
         subparser.add_argument(
-            "-d", "--due", type=str, metavar="<datetime>",
-            help="filter by due date"
+            "-d", "--due", type=str, metavar="<datetime>", help="filter by due date"
         )
         subparser.add_argument(
-            "-r", "--at-risk", action="store_true",
-            help="show only at-risk tasks"
+            "-r", "--at-risk", action="store_true", help="show only at-risk tasks"
         )
         subparser.add_argument(
-            "-o", "--order", type=str, metavar="<field>",
-            help="order by field", default="due"
+            "-o",
+            "--order",
+            type=str,
+            metavar="<field>",
+            help="order by field",
+            default="due",
         )
 
     def validate_args(self, args):
-        """ Custom validation to support multiple statuses. """
+        """Custom validation to support multiple statuses."""
         super().validate_args(args)
 
         if args.status == "active":
@@ -48,9 +55,11 @@ class ListTasksCommand(Command):
         # Convert status strings to enums
         try:
             status_list = str_to_list(args.status)
-            args.status = [] if "all" in status_list else [
-                TaskStatus[s.upper()] for s in status_list
-            ]
+            args.status = (
+                []
+                if "all" in status_list
+                else [TaskStatus[s.upper()] for s in status_list]
+            )
         except KeyError as e:
             raise ValueError(f"Invalid task status: {str(e)}")
 
@@ -90,8 +99,12 @@ class ListTasksCommand(Command):
         status = str_task_status(task)
 
         grid.add_row(
-            short_id, due_date, str_duration(time_required - time_spent),
-            f"{progress:.0%}", status, task.title
+            short_id,
+            due_date,
+            str_duration(time_required - time_spent),
+            f"{progress:.0%}",
+            status,
+            task.title,
         )
 
     def filter_task(self, task, args):
@@ -100,8 +113,11 @@ class ListTasksCommand(Command):
             return False
         if args.at_risk and not task.at_risk:
             return False
-        if (args.due and task.due and
-                task.due >= args.due.replace(tzinfo=task.due.tzinfo)):
+        if (
+            args.due
+            and task.due
+            and task.due >= args.due.replace(tzinfo=task.due.tzinfo)
+        ):
             return False
         return True
 
@@ -112,11 +128,12 @@ class ListTasksCommand(Command):
             "id": lambda x: x.id,
             "due": lambda x: (1, None) if not x.due else (0, x.due),
             "left": lambda x: -x.time_chunks_remaining,
-            "progress": lambda x: -x.time_chunks_remaining / (x.time_chunks_required + 1),
+            "progress": lambda x: -x.time_chunks_remaining
+            / (x.time_chunks_required + 1),
             "prog": lambda x: -x.time_chunks_remaining / (x.time_chunks_required + 1),
             "status": lambda x: x.status,
             "state": lambda x: x.status,
-            "title": lambda x: x.title
+            "title": lambda x: x.title,
         }
 
         try:

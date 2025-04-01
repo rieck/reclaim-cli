@@ -5,22 +5,25 @@
 
 import argparse
 import os
-from reclaim.utils import load_config, set_api_key, HelpFormatter
+
 import reclaim.commands as commands
+from reclaim.utils import HelpFormatter, load_config, set_api_key
 
 
 def parse_args(cmds):
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        prog="reclaim",
-        description="Reclaim CLI",
-        formatter_class=HelpFormatter
+        prog="reclaim", description="Reclaim CLI", formatter_class=HelpFormatter
     )
 
     # Global options
     parser.add_argument(
-        "-c", "--config", type=str, metavar="<file>",
-        default="~/.reclaim", help="set config file"
+        "-c",
+        "--config",
+        type=str,
+        metavar="<file>",
+        default="~/.reclaim",
+        help="set config file",
     )
 
     # Create subparsers
