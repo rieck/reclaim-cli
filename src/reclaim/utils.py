@@ -11,7 +11,7 @@ import dateparser
 import yaml
 from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.exceptions import RecordNotFound
-from reclaim_sdk.resources.task import Task, TaskStatus
+from reclaim_sdk.resources.task import Task, TaskPriority, TaskStatus
 
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -191,8 +191,9 @@ def str_task_status(task):
 
 def parse_priority(priority):
     """Parse a priority string into a priority object."""
-    if priority.startswith("P") or priority.lower().startswith("p"):
-        priority = priority[1:]
-    if not priority.isdigit():
+    priority = priority.upper()
+    if not priority.startswith("P"):
+        priority = f"P{priority}"
+    if not priority[1:].isdigit():
         raise ValueError(f"Invalid priority: {priority}")
-    return int(priority)
+    return TaskPriority(priority)

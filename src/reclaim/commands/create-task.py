@@ -36,7 +36,7 @@ class CreateTaskCommand(Command):
             "-p",
             "--priority",
             type=str,
-            metavar="<priority>",
+            metavar="<priolrity>",
             help="priority of the task",
             default=None,
         )
@@ -85,7 +85,7 @@ class CreateTaskCommand(Command):
         if args.snooze_until:
             task_args["snoozeUntil"] = args.snooze_until
         if args.priority:
-            task_args["priority"] = f"P{args.priority}"
+            task_args["priority"] = args.priority
 
         # Create task and save it
         task = Task(**task_args)

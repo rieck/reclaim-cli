@@ -64,6 +64,9 @@ def main():
 
     except Exception as e:
         print(format_exception(e), file=sys.stderr)
+        import traceback
+
+        traceback.print_exc()
         sys.exit(1)
 
 
