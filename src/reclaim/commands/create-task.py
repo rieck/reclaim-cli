@@ -3,7 +3,7 @@
 # ---
 # Command to create a task at Reclaim.ai
 
-from reclaim_sdk.resources.task import Task, TaskPriority
+from reclaim_sdk.resources.task import Task
 
 from ..utils import print_done
 from .base import Command
