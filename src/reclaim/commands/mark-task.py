@@ -31,10 +31,7 @@ class MarkTaskCommand(Command):
 
     def validate_args(self, args):
         """Check and convert command line arguments."""
-        try:
-            args.id = str_to_id(args.id)
-        except ValueError as e:
-            raise ValueError(f"Invalid task ID: {str(e)}")
+        super().validate_args(args)
         
         available_marks = ["complete", "incomplete"]
         if args.mark not in available_marks:

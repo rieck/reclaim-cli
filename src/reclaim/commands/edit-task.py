@@ -54,51 +54,6 @@ class EditTaskCommand(Command):
         )
         return subparser
 
-    def validate_args(self, args):
-        """Check and convert command line arguments."""
-        try:
-            args.id = str_to_id(args.id)
-        except ValueError as e:
-            raise ValueError(f"Invalid task ID: {str(e)}")
-
-        if args.snooze_until:
-            try:
-                args.snooze_until = parse_datetime(args.snooze_until)
-            except ValueError as e:
-                raise ValueError(f"Invalid snooze date: {str(e)}")
-
-        if args.due:
-            try:
-                args.due = parse_datetime(args.due)
-            except ValueError as e:
-                raise ValueError(f"Invalid due date: {str(e)}")
-
-        if args.priority:
-            priority_num = args.priority.lower().lstrip('p')
-            if priority_num not in ['1', '2', '3', '4']:
-                raise ValueError("Priority must be between 1-4")
-            args.priority = getattr(TaskPriority, f'P{priority_num}')
-
-        if args.duration:
-            try:
-                args.duration = parse_duration(args.duration)
-            except ValueError as e:
-                raise ValueError(f"Invalid duration: {str(e)}")
-            
-        if args.min_chunk_size:
-            try:
-                args.min_chunk_size = parse_duration(args.min_chunk_size)
-            except ValueError as e:
-                raise ValueError(f"Invalid minimum chunk size: {str(e)}")
-            
-        if args.max_chunk_size:
-            try:
-                args.max_chunk_size = parse_duration(args.max_chunk_size)
-            except ValueError as e:
-                raise ValueError(f"Invalid maximum chunk size: {str(e)}")
-
-        return args
-
     def run(self, args):
         """Start task at Reclaim.ai"""
         task = get_task(args.id)

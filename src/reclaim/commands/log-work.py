@@ -31,19 +31,6 @@ class LogWorkCommand(Command):
         )
 
         return subparser
-
-    def validate_args(self, args):
-        """Check and convert command line arguments."""
-        try:
-            args.id = str_to_id(args.id)
-        except ValueError as e:
-            raise ValueError(f"Invalid task ID: {str(e)}")
-
-        try:
-            args.log_time = parse_datetime(args.log_time)
-        except ValueError as e:
-            raise ValueError(f"Invalid log time: {str(e)}")
-        return args
     
     def run(self, args):
         """Log work at Reclaim.ai"""

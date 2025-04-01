@@ -19,21 +19,15 @@ class DeleteTaskCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "id", type=str, metavar="<id>", nargs="+",
+            "ids", type=str, metavar="<id>", nargs="+",
             help="task id to delete"
         )
 
         return subparser
 
-    def validate_args(self, args):
-        """Check and convert command line arguments."""
-        for i, task_id in enumerate(args.id):
-            args.id[i] = str_to_id(task_id)
-        return args
-
     def run(self, args):
         """Delete tasks at Reclaim.ai"""
-        for task_id in args.id:
+        for task_id in args.ids:
             task = get_task(task_id)
 
             # Delete task

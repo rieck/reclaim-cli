@@ -30,14 +30,6 @@ class StartTaskCommand(Command):
 
         return subparser
 
-    def validate_args(self, args):
-        """Check and convert command line arguments."""
-        try:
-            args.id = str_to_id(args.id)
-        except ValueError as e:
-            raise ValueError(f"Invalid task ID: {str(e)}")
-        return args
-
     def run(self, args):
         """Start task at Reclaim.ai"""
         task = get_task(args.id)

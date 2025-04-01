@@ -7,7 +7,7 @@ from rich.table import Table
 from rich.console import Console
 from reclaim_sdk.resources.task import Task, TaskStatus
 from .base import Command
-from ..utils import str_to_list, str_to_id, id_to_str, str_duration, str_task_status, parse_datetime
+from ..utils import str_to_list, id_to_str, str_duration, str_task_status
 
 
 class ListTasksCommand(Command):
@@ -26,10 +26,6 @@ class ListTasksCommand(Command):
             help="filter by status", default="active"
         )
         subparser.add_argument(
-            "-i", "--id", type=str, metavar="<list>",
-            help="filter by task IDs", default="all"
-        )
-        subparser.add_argument(
             "-d", "--due", type=str, metavar="<datetime>",
             help="filter by due date", default="all"
         )
@@ -43,8 +39,9 @@ class ListTasksCommand(Command):
         )
 
     def validate_args(self, args):
-        """Check and convert command line arguments."""
-        # Custom state: active -> new,scheduled,in_progress
+        """ Custom validation to support multiple statuses. """
+        super().validate_args(args)
+
         if args.status == "active":
             args.status = "new,scheduled,in_progress"
 
@@ -56,21 +53,6 @@ class ListTasksCommand(Command):
             ]
         except KeyError as e:
             raise ValueError(f"Invalid task status: {str(e)}")
-
-        # Convert ID strings to integers
-        try:
-            id_list = str_to_list(args.id)
-            args.id = [] if "all" in id_list else [
-                str_to_id(id_str) for id_str in id_list
-            ]
-        except ValueError as e:
-            raise ValueError(f"Invalid task ID: {str(e)}")
-
-        # Parse due date
-        try:
-            args.due = None if args.due == "all" else parse_datetime(args.due)
-        except ValueError as e:
-            raise ValueError(f"Invalid due date: {str(e)}")
 
         return args
 
@@ -115,8 +97,6 @@ class ListTasksCommand(Command):
     def filter_task(self, task, args):
         """Check if task matches filter criteria."""
         if args.status and task.status not in args.status:
-            return False
-        if args.id and task.id not in args.id:
             return False
         if args.at_risk and not task.at_risk:
             return False
