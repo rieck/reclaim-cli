@@ -1,11 +1,8 @@
-# Ignore Pydantic v2 deprecation warning
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-
 import pytest
 from reclaim_sdk.resources.task import Task
-from reclaim.utils import set_api_key, id_to_str
+
 from reclaim.commands import load
+from reclaim.utils import id_to_str, set_api_key
 
 
 @pytest.fixture
