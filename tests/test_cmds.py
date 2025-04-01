@@ -42,6 +42,7 @@ def test_mark_task(commands, test_task):
     # Verify task is complete
     task = get_task(args.id)
     assert task.status == TaskStatus.ARCHIVED
+    # No need to delete task
 
 
 def test_create_task(commands):
@@ -82,3 +83,42 @@ def test_create_task(commands):
 
     # Remove task
     task.delete()
+
+
+def test_edit_task(commands, test_task):
+    """Test edit-task command"""
+    args = argparse.Namespace(
+        id=test_task,
+        title="Test Task",
+        due="in 7 days",
+        snooze_until="in 2 days",
+        priority="P3",
+        duration="2h15",
+        min_chunk_size="1h",
+        max_chunk_size="2h",
+    )
+
+    # Validate and run
+    cmd = commands["edit-task"]
+    cmd.validate_args(args)
+    task = cmd.run(args)
+
+    time.sleep(1)
+
+    task = get_task(task.id)
+    assert task.title == args.title
+    assert task.due == args.due.replace(tzinfo=task.due.tzinfo)
+    assert task.priority == args.priority
+    assert task.duration == args.duration / 60
+    assert task.min_chunk_size == args.min_chunk_size / 15
+    assert task.max_chunk_size == args.max_chunk_size / 15
+
+    # Snooze time is matched to chunks. So round it up to next 15 min block
+    rounded_minutes = ((args.snooze_until.minute + 14) // 15) * 15
+    delta_minutes = rounded_minutes - args.snooze_until.minute
+    args.snooze_until = args.snooze_until + timedelta(minutes=delta_minutes)
+
+    assert task.snooze_until == args.snooze_until.replace(
+        tzinfo=task.snooze_until.tzinfo, second=0, microsecond=0
+    )
+    # No need to delete task
