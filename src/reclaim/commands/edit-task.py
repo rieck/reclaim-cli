@@ -61,16 +61,19 @@ class EditTaskCommand(Command):
             args.id = str_to_id(args.id)
         except ValueError as e:
             raise ValueError(f"Invalid task ID: {str(e)}")
-        try:
-            args.snooze_until = dateparser.parse(args.snooze_until)
-        except ValueError as e:
-            raise ValueError(f"Invalid snooze until: {str(e)}")
+
+        if args.snooze_until:
+            try:
+                args.snooze_until = dateparser.parse(args.snooze_until)
+            except ValueError as e:
+                raise ValueError(f"Invalid snooze until: {str(e)}")
 
         if args.due:
             try:
                 args.due = dateparser.parse(args.due)
             except ValueError as e:
                 raise ValueError(f"Invalid due date: {str(e)}")
+
         if args.priority:
             priority_num = args.priority.lower().lstrip('p')
             if priority_num not in ['1', '2', '3', '4']:
