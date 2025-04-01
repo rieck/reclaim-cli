@@ -7,8 +7,7 @@ from rich.table import Table
 from rich.console import Console
 from reclaim_sdk.resources.task import Task, TaskStatus
 from .base import Command
-from ..utils import str_to_list, str_to_id, id_to_str, str_duration, str_task_status
-import dateparser
+from ..utils import str_to_list, str_to_id, id_to_str, str_duration, str_task_status, parse_datetime
 
 
 class ListTasksCommand(Command):
@@ -69,8 +68,7 @@ class ListTasksCommand(Command):
 
         # Parse due date
         try:
-            args.due = None if args.due == "all" else dateparser.parse(
-                args.due)
+            args.due = None if args.due == "all" else parse_datetime(args.due)
         except ValueError as e:
             raise ValueError(f"Invalid due date: {str(e)}")
 

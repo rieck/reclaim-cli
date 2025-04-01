@@ -9,3 +9,5 @@
 - [ ] Implement some test cases
 - [ ] Improve packaging and maintance scripts
 - [ ] Implement load estimation (this week, next week, ...)
+- [ ] Detect incorrect dates
+

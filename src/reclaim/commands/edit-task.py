@@ -5,8 +5,7 @@
 
 from reclaim_sdk.resources.task import TaskPriority
 from .base import Command
-from ..utils import get_task, str_to_id, print_done, parse_duration
-import dateparser
+from ..utils import get_task, str_to_id, print_done, parse_duration, parse_datetime
 
 
 class EditTaskCommand(Command):
@@ -64,13 +63,13 @@ class EditTaskCommand(Command):
 
         if args.snooze_until:
             try:
-                args.snooze_until = dateparser.parse(args.snooze_until)
+                args.snooze_until = parse_datetime(args.snooze_until)
             except ValueError as e:
-                raise ValueError(f"Invalid snooze until: {str(e)}")
+                raise ValueError(f"Invalid snooze date: {str(e)}")
 
         if args.due:
             try:
-                args.due = dateparser.parse(args.due)
+                args.due = parse_datetime(args.due)
             except ValueError as e:
                 raise ValueError(f"Invalid due date: {str(e)}")
 
@@ -79,16 +78,19 @@ class EditTaskCommand(Command):
             if priority_num not in ['1', '2', '3', '4']:
                 raise ValueError("Priority must be between 1-4")
             args.priority = getattr(TaskPriority, f'P{priority_num}')
+
         if args.duration:
             try:
                 args.duration = parse_duration(args.duration)
             except ValueError as e:
                 raise ValueError(f"Invalid duration: {str(e)}")
+            
         if args.min_chunk_size:
             try:
                 args.min_chunk_size = parse_duration(args.min_chunk_size)
             except ValueError as e:
                 raise ValueError(f"Invalid minimum chunk size: {str(e)}")
+            
         if args.max_chunk_size:
             try:
                 args.max_chunk_size = parse_duration(args.max_chunk_size)

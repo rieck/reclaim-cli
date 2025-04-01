@@ -5,8 +5,7 @@
 
 from reclaim_sdk.resources.task import Task, TaskPriority
 from .base import Command
-from ..utils import print_done, parse_duration
-import dateparser
+from ..utils import print_done, parse_duration, parse_datetime
 
 
 class CreateTaskCommand(Command):
@@ -56,14 +55,14 @@ class CreateTaskCommand(Command):
         """Check and convert command line arguments."""
         if args.due:
             try:
-                args.due = dateparser.parse(args.due)
+                args.due = parse_datetime(args.due)
             except ValueError as e:
                 raise ValueError(f"Invalid due date: {str(e)}")
         if args.snooze_until:
             try:
-                args.snooze_until = dateparser.parse(args.snooze_until)
+                args.snooze_until = parse_datetime(args.snooze_until)
             except ValueError as e:
-                raise ValueError(f"Invalid due date: {str(e)}")
+                raise ValueError(f"Invalid snooze date: {str(e)}")
         if args.priority:
             priority_num = args.priority.lower().lstrip('p')
             if priority_num not in ['1', '2', '3', '4']:

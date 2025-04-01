@@ -7,6 +7,7 @@ import yaml
 import os
 import argparse
 import re
+import dateparser
 from rich.table import Table
 from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.resources.task import Task, TaskStatus
@@ -154,6 +155,14 @@ def parse_duration(time_str):
         raise ValueError("No or negative duration")
 
     return minutes
+
+
+def parse_datetime(str):
+    """Parse a datetime string into a datetime object."""
+    dt = dateparser.parse(str)
+    if not dt:
+        raise ValueError(f"Invalid datetime string: {str}")
+    return dt
 
 
 def str_task_status(task):
