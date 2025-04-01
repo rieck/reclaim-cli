@@ -21,7 +21,6 @@ class ListTasksCommand(Command):
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
-
         subparser.add_argument(
             "-s",
             "--status",
@@ -51,6 +50,7 @@ class ListTasksCommand(Command):
             help="order by field",
             default="due",
         )
+        return subparser
 
     def validate_args(self, args):
         """Custom validation to support multiple statuses."""

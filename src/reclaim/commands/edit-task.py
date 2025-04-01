@@ -21,7 +21,6 @@ class EditTaskCommand(Command):
         subparser.add_argument(
             "id", type=str, metavar="<id>", help="task id to start"
         )
-
         subparser.add_argument(
             "-t",
             "--title",
