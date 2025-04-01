@@ -6,7 +6,7 @@
 from rich.console import Console
 from rich.table import Table
 
-from ..utils import get_task, id_to_str, str_duration, str_task_status, str_to_id
+from ..utils import get_task, id_to_str, str_duration, str_task_status
 from .base import Command
 
 

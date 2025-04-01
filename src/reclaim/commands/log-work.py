@@ -3,14 +3,7 @@
 # ---
 # Command to log work to a task at Reclaim.ai
 
-from ..utils import (
-    get_task,
-    parse_datetime,
-    parse_duration,
-    print_done,
-    str_duration,
-    str_to_id,
-)
+from ..utils import get_task, parse_duration, print_done, str_duration
 from .base import Command
 
 

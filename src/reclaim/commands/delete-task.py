@@ -18,7 +18,9 @@ class DeleteTaskCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
-        subparser.add_argument("id", type=str, metavar="<id>", help="task id to delete")
+        subparser.add_argument(
+            "id", type=str, metavar="<id>", help="task id to delete"
+        )
 
         return subparser
 

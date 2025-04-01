@@ -12,7 +12,6 @@ import yaml
 from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.exceptions import RecordNotFound
 from reclaim_sdk.resources.task import Task, TaskStatus
-from rich.table import Table
 
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"

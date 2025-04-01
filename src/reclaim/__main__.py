@@ -5,6 +5,7 @@
 
 import argparse
 import os
+import sys
 
 import reclaim.commands as commands
 from reclaim.utils import HelpFormatter, load_config, set_api_key
@@ -13,7 +14,9 @@ from reclaim.utils import HelpFormatter, load_config, set_api_key
 def parse_args(cmds):
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        prog="reclaim", description="Reclaim CLI", formatter_class=HelpFormatter
+        prog="reclaim",
+        description="Reclaim CLI",
+        formatter_class=HelpFormatter,
     )
 
     # Global options
@@ -52,16 +55,16 @@ def format_exception(error):
 
 def main():
     """Main entry point for the CLI."""
-    # try:
-    cmds = commands.load()
-    args = parse_args(cmds)
-    args = load_config(args)
-    set_api_key(args)
-    args.func(args)
+    try:
+        cmds = commands.load()
+        args = parse_args(cmds)
+        args = load_config(args)
+        set_api_key(args)
+        args.func(args)
 
-    # except Exception as e:
-    #    print(format_exception(e), file=sys.stderr)
-    #    sys.exit(1)
+    except Exception as e:
+        print(format_exception(e), file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

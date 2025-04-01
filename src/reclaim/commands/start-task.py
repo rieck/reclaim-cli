@@ -3,7 +3,7 @@
 # ---
 # Command to start a task (or put it up-next) at Reclaim.ai
 
-from ..utils import get_task, print_done, str_to_id
+from ..utils import get_task, print_done
 from .base import Command
 
 
@@ -18,7 +18,9 @@ class StartTaskCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
-        subparser.add_argument("id", type=str, metavar="<id>", help="task id to start")
+        subparser.add_argument(
+            "id", type=str, metavar="<id>", help="task id to start"
+        )
 
         subparser.add_argument(
             "-n",

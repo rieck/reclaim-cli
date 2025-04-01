@@ -3,7 +3,7 @@
 # ---
 # Command to mark a task as complete or incomplete
 
-from ..utils import get_task, print_done, str_to_id
+from ..utils import get_task, print_done
 from .base import Command
 
 

@@ -31,10 +31,17 @@ class ListTasksCommand(Command):
             default="active",
         )
         subparser.add_argument(
-            "-d", "--due", type=str, metavar="<datetime>", help="filter by due date"
+            "-d",
+            "--due",
+            type=str,
+            metavar="<datetime>",
+            help="filter by due date",
         )
         subparser.add_argument(
-            "-r", "--at-risk", action="store_true", help="show only at-risk tasks"
+            "-r",
+            "--at-risk",
+            action="store_true",
+            help="show only at-risk tasks",
         )
         subparser.add_argument(
             "-o",
@@ -124,13 +131,18 @@ class ListTasksCommand(Command):
     def sort_tasks(self, tasks, args):
         """Sort tasks by specified field."""
 
+        def calculate_progress(task):
+            """Calculate task progress score (negative for sorting)"""
+            return -task.time_chunks_remaining / (
+                task.time_chunks_required + 1
+            )
+
         sort_keys = {
             "id": lambda x: x.id,
             "due": lambda x: (1, None) if not x.due else (0, x.due),
             "left": lambda x: -x.time_chunks_remaining,
-            "progress": lambda x: -x.time_chunks_remaining
-            / (x.time_chunks_required + 1),
-            "prog": lambda x: -x.time_chunks_remaining / (x.time_chunks_required + 1),
+            "progress": calculate_progress,
+            "prog": calculate_progress,
             "status": lambda x: x.status,
             "state": lambda x: x.status,
             "title": lambda x: x.title,

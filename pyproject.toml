@@ -37,7 +37,7 @@ disallow_untyped_defs = true
 
 # Code formatting
 [tool.black]
-line-length = 88
+line-length = 79
 target-version = ['py38']
 include = '\.pyi?$'
 

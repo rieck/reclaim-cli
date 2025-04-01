@@ -3,9 +3,7 @@
 # ---
 # Command to edit a task at Reclaim.ai
 
-from reclaim_sdk.resources.task import TaskPriority
-
-from ..utils import get_task, parse_datetime, parse_duration, print_done, str_to_id
+from ..utils import get_task, print_done
 from .base import Command
 
 
@@ -20,7 +18,9 @@ class EditTaskCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
 
-        subparser.add_argument("id", type=str, metavar="<id>", help="task id to start")
+        subparser.add_argument(
+            "id", type=str, metavar="<id>", help="task id to start"
+        )
 
         subparser.add_argument(
             "-t",
