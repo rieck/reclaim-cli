@@ -27,18 +27,21 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
         if prefix is None:
             prefix = "usage: "
 
-        # Find the subparser action
-        subparser_action = None
-        for action in actions:
-            if isinstance(action, argparse._SubParsersAction):
-                subparser_action = action
-                break
+        # Only modify main command usage, not subcommands
+        if self._prog == "reclaim":  # Check if we're formatting main command
+            # Find the subparser action
+            subparser_action = None
+            for action in actions:
+                if isinstance(action, argparse._SubParsersAction):
+                    subparser_action = action
+                    break
 
-        if subparser_action:
-            # Use <command> instead of listing all commands
-            usage = f"{prefix}{self._prog} [options] <command> ...\n\n"
+            if subparser_action:
+                # Use <command> instead of listing all commands
+                return f"{prefix}{self._prog} [options] <command> ...\n\n"
 
-        return usage
+        # For subcommands, use default usage formatting
+        return super()._format_usage(usage, actions, groups, prefix)
 
     def _format_action(self, action):
         if isinstance(action, argparse._SubParsersAction):
