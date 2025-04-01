@@ -4,7 +4,7 @@
 # Command to delete a task at Reclaim.ai
 
 from .base import Command
-from ..utils import get_task, str_to_id, print_done
+from ..utils import get_task, print_done
 
 
 class DeleteTaskCommand(Command):
@@ -19,7 +19,7 @@ class DeleteTaskCommand(Command):
         subparser = super().parse_args(subparsers)
 
         subparser.add_argument(
-            "ids", type=str, metavar="<id>", nargs="+",
+            "id", type=str, metavar="<id>",
             help="task id to delete"
         )
 
@@ -27,10 +27,9 @@ class DeleteTaskCommand(Command):
 
     def run(self, args):
         """Delete tasks at Reclaim.ai"""
-        for task_id in args.ids:
-            task = get_task(task_id)
+        task = get_task(args.id)
 
-            # Delete task
-            task.delete()
-            print_done(f"Deleted", task)
+        # Delete task
+        task.delete()
+        print_done(f"Deleted", task)
         return None

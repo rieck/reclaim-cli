@@ -27,7 +27,7 @@ class ListTasksCommand(Command):
         )
         subparser.add_argument(
             "-d", "--due", type=str, metavar="<datetime>",
-            help="filter by due date", default="all"
+            help="filter by due date"
         )
         subparser.add_argument(
             "-r", "--at-risk", action="store_true",

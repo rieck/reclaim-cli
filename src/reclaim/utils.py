@@ -96,12 +96,6 @@ def str_to_id(encoded):
         raise ValueError(f"Cannot decode ID {encoded}")
 
 
-def str_to_ids(str_list):
-    """Convert a string to a list of identifiers."""
-    encoded = str_to_list(str_list)
-    return [str_to_id(s) for s in encoded] if encoded else []
-
-
 def str_to_list(str_list):
     """Convert a string to a list."""
     return [s.strip() for s in str_list.split(",")] if str_list else []

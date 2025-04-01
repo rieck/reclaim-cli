@@ -3,7 +3,7 @@
 # ---
 # Base class for CLI commands
 
-from ..utils import HelpFormatter, str_to_id, str_to_ids, parse_datetime, parse_duration, parse_priority
+from ..utils import HelpFormatter, str_to_id, parse_datetime, parse_duration, parse_priority
 
 
 class Command(object):
@@ -30,7 +30,6 @@ class Command(object):
         """ Validate and transform command arguments. """
         check_args = {
             "id": str_to_id,
-            "ids": str_to_ids,
             "snooze_until": parse_datetime,
             "due": parse_datetime,
             "log_time": parse_datetime,
@@ -41,7 +40,7 @@ class Command(object):
         }
         
         for name, validate in check_args.items():
-            if hasattr(args, name):
+            if hasattr(args, name) and getattr(args, name) is not None:
                 try:
                     setattr(args, name, validate(getattr(args, name)))
                 except ValueError as e:
