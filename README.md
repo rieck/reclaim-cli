@@ -83,7 +83,15 @@ cd reclaim-cli
 pip install -e ".[dev]"
 ```
 
-After installation, the `reclaim` command will be available in your terminal.
+After installation, the `reclaim` command will be available in your terminal. If you want to work on the tool, you can use the following tools to streamline your implementation.
+
+```sh
+pre-commit install
+black src/
+isort src/
+flake8 src/
+pytest
+```
 
 ## Dependencies
 
