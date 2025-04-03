@@ -54,6 +54,7 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
 
 def load_config(args):
     """Load configuration file."""
+    args.config = os.path.expanduser(args.config)
     if not os.path.exists(args.config):
         return args
 
