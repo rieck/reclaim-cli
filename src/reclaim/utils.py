@@ -69,10 +69,10 @@ def load_config(args):
 def set_api_key(cfg):
     """Set the API key in the configuration file."""
     token = None
-    if hasattr(cfg, "reclaim_token"):
-        token = cfg.reclaim_token
-    elif os.environ.get("RECLAIM_TOKEN"):
+    if os.environ.get("RECLAIM_TOKEN"):
         token = os.environ.get("RECLAIM_TOKEN")
+    elif hasattr(cfg, "reclaim_token"):
+        token = cfg.reclaim_token
     if not token:
         raise Exception("No Reclaim API token set")
     ReclaimClient.configure(token=token)
