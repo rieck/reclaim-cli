@@ -34,86 +34,57 @@ options:
   -c <file>, --config <file>            set config file (default: ~/.reclaim)
 ```
 
-Each command follows a consistent pattern and can be extended with its own options, which are described in detail in the sections below.
+Each command follows a consistent pattern and can be extended with its own options. Simply run `reclaim <command> --help`.
 
-### Creating a task
+## Example
 
-The command `create-task` (or short `create`) is used to define a new task at [Reclaim.ai](https:/reclaim.ai) and optionally specify its scheduling preferences. At minimum, it requires a `title`, but you can also provide additional data to help Reclaim.ai plan the task effectively.
-
-```sh
-usage: reclaim create-task [options] <title>
-
-positional arguments:
-  <title>                               title of the task
-
-options:
-  -h, --help                            show this help message and exit
-  -d <datetime>, --due <datetime>       due date of the task (default: None)
-  -p <priority>, --priority <priority>  priority of the task (default: None)
-  -D <duration>, --duration <duration>  duration of the task (default: None)
-  -m <duration>, --min-chunk-size <duration>
-                                        minimum chunk size (default: None)
-  -M <duration>, --max-chunk-size <duration>
-                                        maximum chunk size (default: None)
-  -s <datetime>, --snooze-until <datetime>
-                                        snooze until (default: None)
-```
-
-Most of the provided options are self-explanatory. Due dates can be specified in different formats, such as `2023-11-11` or `April 1, 2023` as well as relative formats like `in 2 weeks`. For priorities, Reclaim uses a discrete scale from `1` (lowest) to `4` (highest). Task duration is specified in minutes and supports common time formats, such as `12min`, `4h30m`, or `4:30`. The minimum and maximum chunk sizes follow the same time format as durations. These define how the task can be broken up when scheduled.
-
-#### Example: Create
+Here is a simple example illustrating how to use the tool. Suppose you want to create a task for writing a new blog post with a duration of 8 hours and a due date in 20 days. You would run:
 
 ```sh
-reclaim create-task "Write paper draft" -d "in 4 days" -p 2 -D 4h -m 45m -M 2h
+reclaim create-task "Write new blog post" --duration 8h -due "in 10 days" 
+# ✓ Created | Id: 5g5p4 | Title: Write new blog post
 ```
 
-This creates a task titled "Write paper draft", due in 4 days, with priority 2, a total duration of 3 hours, and preferred work chunks between 45 minutes and 2 hours.
-
-### Listing tasks
-
-The command `list-tasks` (or short `list`) displays an overview of all tasks currently managed by your Reclaim account. By default, this includes tasks that are in progress, scheduled, or pending scheduling. You can use this command to filter tasks by their status or due date.
+The output of the tool is shown as comment in the example. You can then list your tasks like this:
 
 ```sh
-usage: reclaim list-tasks [options]
-
-options:
-  -h, --help                       show this help message and exit
-  -s <list>, --status <list>       filter by status (default: active)
-  -d <datetime>, --due <datetime>  filter by due date (default: None)
-  -r, --at-risk                    show only at-risk tasks (default: False)
-  -o <field>, --order <field>      order by field (default: due)
+reclaim list-tasks
+# Id     Due          Left  Prog  State  Title                  
+# 5g5p4  2025-04-13   8h0m    0%   N3    Write new blog post
 ```
 
-The supported statuses are "active", "in_progress", "scheduled", "new", "complete", and "archived". The "active" status is a shorthand for "new,scheduled,in_progress". Additionally, you can filter to show only at-risk tasks or order the listing by fields like "due", "left", "progress", "status", or "title".
-
-#### Example: List
+You task has state `N` (new) with default priority 3. Later, you realize that you need less time for the task. Simply update it using its identifier:
 
 ```sh
-reclaim list-tasks -s scheduled,new -o state
+reclaim edit-task 5g5p4 --duration 4h
+# ✓ Edited | Id: 5g5p4 | Title: Write new blog post
 ```
 
-This lists all tasks that are "in_progress" or "scheduled", sorted by their remaining time. Each task is identified by a short string ID.
-
-### Deleting a teask
-
-The command `delete-task` (or short `delete`) allows you to permanently remove a task from Reclaim.ai. Since this is a destructive operation and deleted tasks cannot be recovered, it should be used with caution.
+Eventually, you notice that nobody reads blogs anymore, so you delete the task and move on:
 
 ```sh
-usage: reclaim delete-task [options] <id>
-
-positional arguments:
-  <id>        task id to delete
-
-options:
-  -h, --help  show this help message and exit
+reclaim delete-task 5g5p4
+# ✓ Deleted | Id: 5g5p4 | Title: Write new blog post
 ```
 
-The task to be deleted is identified by its short string ID, which can be obtained from the task listing.
+## Installation
 
-#### Example: Delete
+The tool is easiest installed directly from Github. You can run
 
 ```sh
-reclaim delete-task 5fte1
+pip install git+https://github.com/rieck/reclaim-cli.git
 ```
 
-This permanently removes the specified task from your Reclaim.ai account.
+This will install the latest version of the tool directly from the repository. You can also install it in development mode by cloning the repository and running:
+
+```sh
+git clone https://github.com/rieck/reclaim-cli.git
+cd reclaim-cli
+pip install -e ".[dev]"
+```
+
+After installation, the `reclaim` command will be available in your terminal.
+
+## Dependencies
+
+The tool relies on the [unofficial Reclaim.ai Python SDK](https://github.com/labiso-gmbh/reclaim-sdk) developed by Labiso GmbH. However, since it requires functionality beyond what is available in version `v0.6.3` of the SDK, the dependency is installed from a [patched fork](https://github.com/rieck/reclaim-sdk/tree/all-patches).
