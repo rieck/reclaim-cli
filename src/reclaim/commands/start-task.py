@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to start a task (or put it up-next) at Reclaim.ai
+"""Command to start a task (or put it up-next) at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, print_done
 from .base import Command
 
 
 class StartTaskCommand(Command):
-    """Start task at Reclaim.ai"""
+    """Start task at Reclaim.ai."""
 
     name = "start-task"
     description = "start a task"
@@ -39,16 +39,16 @@ class StartTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Start task at Reclaim.ai"""
+        """Start task at Reclaim.ai."""
         task = get_task(args.id)
 
         if args.up_next:
             # Start task in next available slot
             task.up_next = True
             task.save()
-            print_done(f"Up next", task)
+            print_done("Up next", task)
         else:
             # Start task immediately
             task.start()
-            print_done(f"Started", task)
+            print_done("Started", task)
         return task

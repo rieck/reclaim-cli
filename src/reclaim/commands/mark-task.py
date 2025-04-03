@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to mark a task as complete or incomplete
+"""Command to mark a task as complete or incomplete at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, print_done
 from .base import Command
 
 
 class MarkTaskCommand(Command):
-    """Mark a task at Reclaim.ai"""
+    """Mark a task at Reclaim.ai."""
 
     name = "mark-task"
     description = "mark a task (in)complete"
@@ -42,7 +42,7 @@ class MarkTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Mark task at Reclaim.ai"""
+        """Mark task at Reclaim.ai."""
         task = get_task(args.id)
 
         # Mark task

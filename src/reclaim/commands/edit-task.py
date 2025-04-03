@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to edit a task at Reclaim.ai
+"""Command to edit a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, print_done
 from .base import Command
 
 
 class EditTaskCommand(Command):
-    """Edit task at Reclaim.ai"""
+    """Edit task at Reclaim.ai."""
 
     name = "edit-task"
     description = "edit a task"
@@ -87,7 +87,7 @@ class EditTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Start task at Reclaim.ai"""
+        """Edit task at Reclaim.ai."""
         task = get_task(args.id)
 
         if args.title:
@@ -106,5 +106,5 @@ class EditTaskCommand(Command):
             task.max_chunk_size = int(args.max_chunk_size / 15)  # Chunks
 
         task.save()
-        print_done(f"Edited", task)
+        print_done("Edited", task)
         return task

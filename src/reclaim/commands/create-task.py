@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to create a task at Reclaim.ai
+"""Command to create a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from reclaim_sdk.resources.task import Task
 
@@ -10,7 +10,7 @@ from .base import Command
 
 
 class CreateTaskCommand(Command):
-    """Create a task at Reclaim.ai"""
+    """Create a task at Reclaim.ai."""
 
     name = "create-task"
     description = "create a task"
@@ -83,7 +83,7 @@ class CreateTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Create task at Reclaim.ai"""
+        """Create task at Reclaim.ai."""
         task_args = {"title": args.title}
 
         # Prepare optional arguments
@@ -107,5 +107,5 @@ class CreateTaskCommand(Command):
 
         # Save task
         task.save()
-        print_done(f"Created", task)
+        print_done("Created", task)
         return task

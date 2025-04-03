@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Load and initialize the commands
+"""Load and initialize the commands.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 import glob
 import os
@@ -10,7 +10,7 @@ from .base import Command
 
 
 def load():
-    """Find all files in the command directory and import them"""
+    """Find all files in the command directory and import them."""
     cmd_dir = os.path.relpath(os.path.dirname(__file__))
 
     # get cmd files

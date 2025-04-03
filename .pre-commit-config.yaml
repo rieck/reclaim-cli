@@ -1,11 +1,22 @@
 repos:
--   repo: https://github.com/psf/black
+  - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
-    -   id: black
+      - id: black
         language_version: python3
--   repo: https://github.com/pycqa/isort
+
+  - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
-    -   id: isort
+      - id: isort
+        args: ["--profile", "black"]
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [
+            "flake8-docstrings", # checks docstring style
+            "flake8-bugbear", # finds likely bugs
+            "flake8-quotes", # checks quote consistency
+          ]
