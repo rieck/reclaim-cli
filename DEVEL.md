@@ -15,6 +15,7 @@ Install pre-commit hook. Test tools manually.
 pre-commit install
 black src/
 isort src/
+flake8 src/
 ```
 
 Run pytest to see whether everything works
