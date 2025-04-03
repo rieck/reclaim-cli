@@ -12,7 +12,7 @@ The `reclaim` tool provides a simple and flexible command-line interface (CLI) f
 
 To see the available commands, you can run:
 
-```
+```console
 reclaim --help
 usage: reclaim [options] <command> ...
 
