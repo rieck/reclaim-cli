@@ -10,3 +10,4 @@
 - [x] Improve packaging and maintance scripts
 - [ ] Implement load estimation (this week, next week, ...)
 - [ ] Detect incorrect dates
+- [ ] Fix timezone madness when testing on Github
