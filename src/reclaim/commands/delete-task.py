@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to delete a task at Reclaim.ai
+"""Command to delete a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, print_done
 from .base import Command
 
 
 class DeleteTaskCommand(Command):
-    """Delete a task at Reclaim.ai"""
+    """Delete a task at Reclaim.ai."""
 
     name = "delete-task"
     description = "delete a task"
@@ -32,10 +32,10 @@ class DeleteTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Delete tasks at Reclaim.ai"""
+        """Delete tasks at Reclaim.ai."""
         task = get_task(args.id)
 
         # Delete task
         task.delete()
-        print_done(f"Deleted", task)
+        print_done("Deleted", task)
         return None

@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to show a task at Reclaim.ai
+"""Command to show a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from rich.console import Console
 from rich.table import Table
@@ -11,7 +11,7 @@ from .base import Command
 
 
 class ShowTaskCommand(Command):
-    """Show a task at Reclaim.ai"""
+    """Show a task at Reclaim.ai."""
 
     name = "show-task"
     description = "show a task"
@@ -35,8 +35,7 @@ class ShowTaskCommand(Command):
         return args
 
     def run(self, args):
-        """Show task at Reclaim.ai"""
-
+        """Show task at Reclaim.ai."""
         task = get_task(args.id)
         tid = id_to_str(task.id)
 

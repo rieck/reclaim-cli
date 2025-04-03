@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Utility functions
+"""Utility Functions.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 import argparse
 import os
@@ -21,6 +21,7 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
     """Custom help formatter with fixed width and position."""
 
     def __init__(self, prog):
+        """Initialize the help formatter."""
         super().__init__(prog, max_help_position=40, width=80)
 
     def _format_usage(self, usage, actions, groups, prefix):
@@ -52,7 +53,7 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
 
 
 def load_config(args):
-    """Load configuration file"""
+    """Load configuration file."""
     if not os.path.exists(args.config):
         return args
 
@@ -104,7 +105,7 @@ def str_to_list(str_list):
 
 
 def get_task(task_id):
-    """Get a task from Reclaim.ai"""
+    """Get a task from Reclaim.ai."""
     try:
         task = Task.get(task_id)
     except RecordNotFound:
@@ -121,14 +122,14 @@ def print_done(msg, task):
 
 
 def str_duration(minutes):
-    """Convert minutes to a duration string"""
+    """Convert minutes to a duration string."""
     hours = minutes // 60
     minutes = minutes % 60
     return f"{hours}h{minutes}m"
 
 
 def parse_duration(time_str):
-    """Parse a duration string into minutes"""
+    """Parse a duration string into minutes."""
     time_str = time_str.lower().replace(" ", "")
 
     # Define regex patterns for time units
@@ -169,7 +170,6 @@ def parse_datetime(str):
 
 def str_task_status(task):
     """Convert a task status to a string."""
-
     # Get status character
     if task.status == TaskStatus.CANCELLED:
         status = "X"

@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to create a task at Reclaim.ai
+"""Command to add time to a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, parse_duration, print_done, str_duration
 from .base import Command
 
 
 class AddTimeCommand(Command):
-    """Add time to task at Reclaim.ai"""
+    """Add time to task at Reclaim.ai."""
 
     name = "add-time"
     description = "add time to a task"
@@ -28,7 +28,7 @@ class AddTimeCommand(Command):
         return subparser
 
     def run(self, args):
-        """Add time to task at Reclaim.ai"""
+        """Add time to task at Reclaim.ai."""
         task = get_task(args.id)
 
         # Add time to task

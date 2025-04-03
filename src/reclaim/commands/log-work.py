@@ -1,14 +1,14 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to log work to a task at Reclaim.ai
+"""Command to log work to a task at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from ..utils import get_task, parse_duration, print_done, str_duration
 from .base import Command
 
 
 class LogWorkCommand(Command):
-    """Log work to task at Reclaim.ai"""
+    """Log work to task at Reclaim.ai."""
 
     name = "log-work"
     description = "log work to a task"
@@ -43,7 +43,7 @@ class LogWorkCommand(Command):
         return args
 
     def run(self, args):
-        """Log work at Reclaim.ai"""
+        """Log work at Reclaim.ai."""
         task = get_task(args.id)
 
         # Log work

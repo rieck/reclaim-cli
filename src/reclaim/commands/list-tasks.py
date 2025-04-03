@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Command to list tasks at Reclaim.ai
+"""Command to list tasks at Reclaim.ai.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 from reclaim_sdk.resources.task import Task, TaskStatus
 from rich.console import Console
@@ -12,7 +12,7 @@ from .base import Command
 
 
 class ListTasksCommand(Command):
-    """List tasks at Reclaim.ai"""
+    """List tasks at Reclaim.ai."""
 
     name = "list-tasks"
     description = "list tasks"
@@ -53,7 +53,7 @@ class ListTasksCommand(Command):
         return subparser
 
     def validate_args(self, args):
-        """Custom validation to support multiple statuses."""
+        """Validate arguments."""
         super().validate_args(args)
 
         if args.status == "active":
@@ -132,7 +132,7 @@ class ListTasksCommand(Command):
         """Sort tasks by specified field."""
 
         def calculate_progress(task):
-            """Calculate task progress score (negative for sorting)"""
+            """Calculate task progress score (negative for sorting)."""
             return -task.time_chunks_remaining / (
                 task.time_chunks_required + 1
             )

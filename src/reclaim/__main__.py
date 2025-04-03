@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Main entry point for the CLI
+"""Reclaim CLI Main.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 import argparse
 import os
@@ -54,7 +54,7 @@ def format_exception(error):
 
 
 def main():
-    """Main entry point for the CLI."""
+    """Run the Reclaim CLI."""
     try:
         cmds = commands.load()
         args = parse_args(cmds)

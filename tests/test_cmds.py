@@ -1,7 +1,7 @@
-# Reclaim CLI
-# Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
-# ---
-# Test cases for delete command
+"""Test cases for delete command.
+
+Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
+"""
 
 import argparse
 import time
@@ -14,7 +14,7 @@ from reclaim.utils import get_task
 
 
 def test_delete_task(commands, test_task):
-    """Test delete-task command"""
+    """Test delete-task command."""
     args = argparse.Namespace(id=test_task)
 
     # Validate and run
@@ -23,12 +23,12 @@ def test_delete_task(commands, test_task):
     cmd.run(args)
 
     # Verify task is deleted
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         get_task(args.id)
 
 
 def test_mark_task(commands, test_task):
-    """Test mark-task command"""
+    """Test mark-task command."""
     args = argparse.Namespace(id=test_task, mark="complete")
 
     # Validate and run
@@ -46,7 +46,7 @@ def test_mark_task(commands, test_task):
 
 
 def test_create_task(commands):
-    """Test create-task command"""
+    """Test create-task command."""
     args = argparse.Namespace(
         title="Test Task",
         due="in 7 days",
@@ -86,7 +86,7 @@ def test_create_task(commands):
 
 
 def test_edit_task(commands, test_task):
-    """Test edit-task command"""
+    """Test edit-task command."""
     args = argparse.Namespace(
         id=test_task,
         title="Test Task",
