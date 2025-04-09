@@ -11,3 +11,4 @@
 - [ ] Implement load estimation (this week, next week, ...)
 - [ ] Detect incorrect dates
 - [ ] Fix timezone madness when testing on Github
+- [ ] Fix problem with snooze_until int vs. str
