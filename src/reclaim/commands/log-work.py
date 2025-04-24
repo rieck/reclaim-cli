@@ -3,7 +3,7 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
-from ..utils import get_task, parse_duration, print_done, str_duration
+from ..utils import get_task, print_done, str_duration
 from .base import Command
 
 
@@ -47,9 +47,8 @@ class LogWorkCommand(Command):
         task = get_task(args.id)
 
         # Log work
-        mins = parse_duration(args.duration)
-        task.log_work(mins, end=args.log_time)  # Expects minutes
-        dur = str_duration(mins)
+        task.log_work(args.duration, end=args.log_time)  # Expects minutes
+        dur = str_duration(args.duration)
 
         print_done(f"Logged: {dur}", task)
         return task
