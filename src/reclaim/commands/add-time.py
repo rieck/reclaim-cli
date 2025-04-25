@@ -36,3 +36,5 @@ class AddTimeCommand(Command):
         task.add_time(mins / 60)  # Expects hours
         dur = str_duration(mins)
         print_done(f"Added: {dur}", task)
+
+        return task
