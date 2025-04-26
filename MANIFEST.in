@@ -1,0 +1,24 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include pyproject.toml
+
+recursive-include tests *
+
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude *.egg-info
+
+global-exclude build/
+global-exclude dist/
+
+global-exclude .git
+global-exclude .gitignore
+global-exclude .coverage
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .ruff_cache
+global-exclude .DS_Store
+global-exclude .idea/
+global-exclude .vscode/ 
