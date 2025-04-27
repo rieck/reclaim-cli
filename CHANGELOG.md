@@ -14,3 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Time tracking functionality
 - Configuration management
 - Command-line interface with help formatting
+
+### Changed
+
+- Fixed issues with double parsing of durations
