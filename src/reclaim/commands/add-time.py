@@ -3,7 +3,7 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
-from ..utils import get_task, parse_duration, print_done, str_duration
+from ..utils import get_task, print_done, str_duration
 from .base import Command
 
 
@@ -32,9 +32,8 @@ class AddTimeCommand(Command):
         task = get_task(args.id)
 
         # Add time to task
-        mins = parse_duration(args.duration)
-        task.add_time(mins / 60)  # Expects hours
-        dur = str_duration(mins)
+        task.add_time(args.duration / 60)  # Expects hours
+        dur = str_duration(args.duration)
         print_done(f"Added: {dur}", task)
 
         return task
