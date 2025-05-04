@@ -12,7 +12,7 @@ dependencies = [
     "PyYAML>=6.0",
     "dateparser==1.2.1",
     "rich==13.9.4",
-    "reclaim-sdk @ git+https://github.com/rieck/reclaim-sdk@fixed",
+    "reclaim-sdk-fixed==0.6.3.post1",
 ]
 
 [project.scripts]
