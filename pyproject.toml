@@ -4,20 +4,39 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reclaim-cli"
-version = "0.1.1.post2"
-description = "CLI for Reclaim.ai service"
+version = "0.1.1.post3"
+description = "A command-line tool for interacting with Reclaim.ai for task management."
 license = {text = "MIT"}
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [
     { name="Rieck", email="konrad@mlsec.org" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "PyYAML>=6.0",
     "dateparser==1.2.1",
     "rich==13.9.4",
-    "reclaim-sdk-fixed==0.6.3.post1",
+    "reclaim-sdk-fixed==0.6.3.post2",
 ]
+keywords = ["cli", "reclaim", "productivity", "automation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Utilities",
+    "Topic :: Office/Business :: Scheduling",
+    "Topic :: Office/Business :: Time Tracking",
+]
+
+[project.urls]
+Homepage = "https://github.com/rieck/reclaim-cli"
+Source = "https://github.com/rieck/reclaim-cli"
+Issues = "https://github.com/rieck/reclaim-cli/issues"
+Changelog = "https://github.com/rieck/reclaim-cli/blob/main/CHANGELOG.md"
 
 [project.scripts]
 reclaim = "reclaim.__main__:main"
@@ -36,7 +55,7 @@ filterwarnings = [
 
 # Type checking
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -44,7 +63,7 @@ disallow_untyped_defs = true
 # Code formatting
 [tool.black]
 line-length = 79
-target-version = ['py38']
+target-version = ['py310']
 include = '\.pyi?$'
 
 # Import sorting

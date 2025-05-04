@@ -26,27 +26,25 @@ options:
   -c <file>, --config <file>            set config file (default: ~/.reclaim)
 ```
 
-Each command can be extended with its further options. Simply run `reclaim <command> --help` to the see available options for a command. For example, the following output shows all options available with the command `create-task`:
+Each command can be extended with its further options. Simply run `reclaim <command> --help` to the see available options for a command. 
+
+## Authentication
+
+To authenticate the tool with Reclaim.ai, you first need to obtain an API token from your account. Visit the [developer settings page](https://app.reclaim.ai/settings/developer) and generate a new API token. Once you have your token, you can provide it to the reclaim CLI in one of two ways
+
+(1) Add the token to the configuration file `~/.reclaim` in your home directory:
 
 ```console
-$ reclaim create-task --help
-usage: reclaim create-task [...] <title>
-
-positional arguments:
-  <title>                               title of the task
-
-options:
-  -h, --help                            show this help message and exit
-  -d <datetime>, --due <datetime>       due date of the task
-  -p <priority>, --priority <priority>  priority of the task
-  -D <duration>, --duration <duration>  duration of the task
-  -m <duration>, --min-chunk-size <duration>
-                                        minimum chunk size
-  -M <duration>, --max-chunk-size <duration>
-                                        maximum chunk size
-  -s <datetime>, --snooze-until <datetime>
-                                        snooze until
+$ echo "reclaim_token: <token>" >> ~/.reclaim
 ```
+
+(2) Set the environment variable `RECLAIM_TOKEN` with your token value:
+
+```console
+$ export RECLAIM_TOKEN=<token>
+```
+
+This ensures the tool can securely authenticate and interact with your Reclaim.ai account.
 
 ## Example
 
