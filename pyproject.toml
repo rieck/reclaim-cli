@@ -29,7 +29,6 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Topic :: Utilities",
     "Topic :: Office/Business :: Scheduling",
-    "Topic :: Office/Business :: Time Tracking",
 ]
 
 [project.urls]
