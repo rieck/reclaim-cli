@@ -18,3 +18,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Fixed issues with double parsing of durations
+- Renamed location of patched reclaim-sdk on Github

@@ -95,4 +95,4 @@ pytest
 
 ## Dependencies
 
-The tool relies on the [unofficial Reclaim.ai Python SDK](https://github.com/labiso-gmbh/reclaim-sdk) developed by Labiso GmbH. However, since it requires functionality beyond what is available in version `v0.6.3` of the SDK, the dependency is installed from a [patched fork](https://github.com/rieck/reclaim-sdk/tree/all-patches).
+The tool relies on the [unofficial Reclaim.ai Python SDK](https://github.com/labiso-gmbh/reclaim-sdk) developed by Labiso GmbH. However, since it requires functionality beyond what is available in version `v0.6.3` of the SDK, the dependency is installed from a [patched fork](https://github.com/rieck/reclaim-sdk/tree/fixed).
