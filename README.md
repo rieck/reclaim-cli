@@ -1,16 +1,8 @@
 # Reclaim CLI
 
-Copyright (c) 2025 Konrad Rieck (<konrad@mlsec.org>)
+This tool provides a simple and flexible command-line interface (CLI) for managing tasks at [Reclaim.ai](https://reclaim.ai). At its core, the tool operates through a set of commands, each targeting a specific aspect of task management. The commands allow you to create tasks, log work, lists tasks, start and stop time tracking, and more.
 
-## About
-
-This is a simple Python CLI for the Reclaim service.
-
-## Usage
-
-The `reclaim` tool provides a simple and flexible command-line interface (CLI) for managing tasks at [Reclaim.ai](https://reclaim.ai). At its core, `reclaim` operates through a set of commands, each targeting a specific aspect of task management. The commands allow you to create tasks, log work, lists tasks, start and stop time tracking, and more.
-
-To see the available commands, you can run:
+To see the available commands, you can simply run `reclaim --help`, once the tools has been installed.
 
 ```console
 reclaim --help
@@ -34,7 +26,27 @@ options:
   -c <file>, --config <file>            set config file (default: ~/.reclaim)
 ```
 
-Each command follows a consistent pattern and can be extended with its own options. Simply run `reclaim <command> --help`.
+Each command can be extended with its further options. Simply run `reclaim <command> --help` to the see available options for a command. For example, the following output shows all options available with the command `create-task`:
+
+```console
+$ reclaim create-task --help
+usage: reclaim create-task [...] <title>
+
+positional arguments:
+  <title>                               title of the task
+
+options:
+  -h, --help                            show this help message and exit
+  -d <datetime>, --due <datetime>       due date of the task
+  -p <priority>, --priority <priority>  priority of the task
+  -D <duration>, --duration <duration>  duration of the task
+  -m <duration>, --min-chunk-size <duration>
+                                        minimum chunk size
+  -M <duration>, --max-chunk-size <duration>
+                                        maximum chunk size
+  -s <datetime>, --snooze-until <datetime>
+                                        snooze until
+```
 
 ## Example
 
@@ -69,13 +81,13 @@ reclaim delete-task 5g5p4
 
 ## Installation
 
-The tool is easiest installed directly from Github. You can run
+The tool is easiest installed directly via pip
 
 ```sh
-pip install git+https://github.com/rieck/reclaim-cli.git
+pip install reclaim-cli
 ```
 
-This will install the latest version of the tool directly from the repository. You can also install it in development mode by cloning the repository and running:
+This will install the latest version of the tool. You can also install it in development mode by cloning the Github repository and running:
 
 ```sh
 git clone https://github.com/rieck/reclaim-cli.git
@@ -83,7 +95,7 @@ cd reclaim-cli
 pip install -e ".[dev]"
 ```
 
-After installation, the `reclaim` command will be available in your terminal. If you want to work on the tool, you can use the following tools to streamline your implementation.
+After installation, the `reclaim` command will be available in your local environment. If you want to work on the tool, you can use the following tools to streamline your implementation.
 
 ```sh
 pre-commit install
