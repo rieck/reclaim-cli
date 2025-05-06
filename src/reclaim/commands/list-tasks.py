@@ -22,11 +22,17 @@ class ListTasksCommand(Command):
         """Add arguments to the subparser."""
         subparser = super().parse_args(subparsers)
         subparser.add_argument(
+            "-a",
+            "--all",
+            action="store_true",
+            help="show all tasks",
+        )
+        subparser.add_argument(
             "-s",
             "--status",
             type=str,
             metavar="<list>",
-            help="filter by status",
+            help="filter by status: new, scheduled, in_progress, archived",
             default="active",
         )
         subparser.add_argument(
@@ -47,7 +53,7 @@ class ListTasksCommand(Command):
             "--order",
             type=str,
             metavar="<field>",
-            help="order by field",
+            help="order by field: id, due, left, prog, status, title",
             default="due",
         )
         return subparser
@@ -58,6 +64,9 @@ class ListTasksCommand(Command):
 
         if args.status == "active":
             args.status = "new,scheduled,in_progress"
+
+        if args.all:
+            args.status = "all"
 
         # Convert status strings to enums
         try:
