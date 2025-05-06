@@ -22,7 +22,11 @@ class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
 
     def __init__(self, prog):
         """Initialize the help formatter."""
-        super().__init__(prog, max_help_position=40, width=80)
+        try:
+            width = os.get_terminal_size().columns
+        except OSError:
+            width = 80  # fallback if terminal size can't be determined
+        super().__init__(prog, max_help_position=16, width=width)
 
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
