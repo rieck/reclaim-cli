@@ -40,6 +40,7 @@ class Command(object):
             "duration": parse_duration,
             "min_chunk_size": parse_duration,
             "max_chunk_size": parse_duration,
+            "work_time": parse_duration,
         }
 
         for name, validate in check_args.items():
