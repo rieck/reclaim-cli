@@ -3,7 +3,8 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
-from ..utils import get_task, print_done, str_duration
+from ..str import str_duration
+from ..utils import get_task, print_done
 from .base import Command
 
 

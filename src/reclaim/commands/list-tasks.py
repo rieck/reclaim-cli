@@ -7,7 +7,8 @@ from reclaim_sdk.resources.task import Task, TaskStatus
 from rich.console import Console
 from rich.table import Table
 
-from ..utils import id_to_str, str_duration, str_task_status, str_to_list
+from ..parse import parse_list
+from ..str import str_duration, str_task_status, str_tid
 from .base import Command
 
 
@@ -70,7 +71,7 @@ class ListTasksCommand(Command):
 
         # Convert status strings to enums
         try:
-            status_list = str_to_list(args.status)
+            status_list = parse_list(args.status)
             args.status = (
                 []
                 if "all" in status_list
@@ -107,7 +108,7 @@ class ListTasksCommand(Command):
 
     def add_task(self, task, grid):
         """Format and add a task to the grid."""
-        short_id = id_to_str(task.id)
+        short_id = str_tid(task.id)
         due_date = task.due.strftime("%Y-%m-%d") if task.due else "anytime"
         time_required = task.time_chunks_required * 15
         time_spent = task.time_chunks_spent * 15

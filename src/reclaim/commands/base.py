@@ -3,13 +3,8 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
-from ..utils import (
-    HelpFormatter,
-    parse_datetime,
-    parse_duration,
-    parse_priority,
-    str_to_id,
-)
+from ..parse import parse_datetime, parse_duration, parse_priority, parse_tid
+from ..utils import HelpFormatter
 
 
 class Command(object):
@@ -37,7 +32,7 @@ class Command(object):
     def validate_args(self, args):
         """Validate and transform command arguments."""
         check_args = {
-            "id": str_to_id,
+            "id": parse_tid,
             "snooze_until": parse_datetime,
             "due": parse_datetime,
             "log_time": parse_datetime,
