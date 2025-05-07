@@ -4,7 +4,8 @@ import pytest
 from reclaim_sdk.resources.task import Task
 
 from reclaim.commands import load
-from reclaim.utils import id_to_str, load_config, set_api_key
+from reclaim.str import str_tid
+from reclaim.utils import load_config, set_api_key
 
 
 @pytest.fixture
@@ -24,7 +25,7 @@ def test_task():
     # Create task
     task = Task(title="Test task")
     task.save()
-    yield id_to_str(task.id)
+    yield str_tid(task.id)
 
     # Cleanup
     try:
