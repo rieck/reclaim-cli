@@ -9,6 +9,7 @@ from reclaim_sdk.resources.task import Task
 from rich.console import Console
 from rich.table import Table
 
+from ..str import str_tid
 from .base import Command
 
 
@@ -57,20 +58,42 @@ class ShowLoadCommand(Command):
         ) + timedelta(days=days_until_monday)
         return monday
 
+    def task_load(self, task, today):
+        """Calculate remaining workload for a task."""
+        work_left = (task.time_chunks_required - task.time_chunks_spent) / 4
+        if work_left <= 0:
+            return 0
+
+        start = max(task.snooze_until or today, today)
+        days_left = (task.due - start).days
+        return 7 * (work_left / days_left) if days_left > 0 else 0
+
+    def format_task_list(self, tasks, cutoff=4):
+        """Format list of task IDs."""
+        if len(tasks) <= cutoff:
+            return " ".join(str_tid(t.id) for t in tasks)
+        return " ".join(str_tid(t.id) for t in tasks[: cutoff - 1]) + " ..."
+
+    def create_load_table(self):
+        """Create table for workload display."""
+        table = Table(box=False, header_style="bold underline")
+        columns = [
+            ("Week", "left"),
+            ("Start", "left"),
+            ("End", "left"),
+            ("Hours", "right"),
+            ("Load", "right"),
+            ("Num", "right"),
+            ("Tasks", "left"),
+        ]
+        for name, justify in columns:
+            table.add_column(name, justify=justify)
+        return table
+
     def run(self, args):
         """Show workload at Reclaim.ai."""
-        # Get all tasks
         tasks = Task.list()
-        table = Table(box=False, header_style="bold underline")
-
-        # Add columns
-        table.add_column("Week", justify="left")
-        table.add_column("Start", justify="left")
-        table.add_column("End", justify="left")
-        table.add_column("Hours", justify="right")
-        table.add_column("Load", justify="right")
-        table.add_column("Tasks", justify="right")
-
+        table = self.create_load_table()
         today = datetime.now(timezone.utc)
         monday = self.next_monday(today)
 
@@ -78,34 +101,29 @@ class ShowLoadCommand(Command):
             week_start = monday + timedelta(days=7 * week)
             week_end = week_start + timedelta(days=7)
 
-            load = in_week = active = 0
-            for task in tasks:
-                work_left = (
-                    task.time_chunks_required - task.time_chunks_spent
-                ) / 4
-                if work_left <= 0:
-                    continue
-                active += 1
+            # Get active tasks
+            active_tasks = [t for t in tasks if self.task_load(t, today) > 0]
 
-                start = task.snooze_until or today
-                if task.due < week_start or start > week_end:
-                    continue
+            # Filter tasks that are within the week
+            week_tasks = []
+            for t in active_tasks:
+                too_early = t.due < week_start
+                too_late = (t.snooze_until or today) > week_end
+                if not (too_early or too_late):
+                    week_tasks.append(t)
 
-                in_week += 1
-                start = max(start, today)
-                load += 7 * (work_left / (task.due - start).days)
+            # Calculate total load for the week
+            total_load = sum(self.task_load(t, today) for t in week_tasks)
 
             table.add_row(
                 f"W{week_start.isocalendar()[1]}",
                 week_start.strftime("%Y-%m-%d"),
                 week_end.strftime("%Y-%m-%d"),
-                f"{load:.1f}h",
-                f"{60*load/args.work_time:.1%}",
-                f"{in_week}/{active}",
+                f"{total_load:.1f}h",
+                f"{60*total_load/args.work_time:.1%}",
+                f"{len(week_tasks)}",
+                self.format_task_list(sorted(week_tasks, key=lambda t: t.due)),
             )
 
-        # Print table
-        console = Console()
-        console.print(table)
-
+        Console().print(table)
         return tasks
