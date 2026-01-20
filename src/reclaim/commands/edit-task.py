@@ -30,6 +30,14 @@ class EditTaskCommand(Command):
             default=None,
         )
         subparser.add_argument(
+            "-n",
+            "--notes",
+            type=str,
+            metavar="<text>",
+            help="notes/description for the task",
+            default=None,
+        )
+        subparser.add_argument(
             "-d",
             "--due",
             type=str,
@@ -92,6 +100,8 @@ class EditTaskCommand(Command):
 
         if args.title:
             task.title = args.title
+        if args.notes is not None:
+            task.notes = args.notes
         if args.due:
             task.due = args.due
         if args.snooze_until:

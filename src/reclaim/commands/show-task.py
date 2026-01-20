@@ -107,4 +107,8 @@ class ShowTaskCommand(Command):
         console = Console()
         console.print(f"Task {tid}: {task.title}", style="bold underline")
         console.print(grid)
+        if task.notes:
+            console.print()
+            console.print("Notes:", style="bold")
+            console.print(task.notes)
         return task

@@ -25,6 +25,14 @@ class CreateTaskCommand(Command):
         )
 
         subparser.add_argument(
+            "-n",
+            "--notes",
+            type=str,
+            metavar="<text>",
+            help="notes/description for the task",
+            default=None,
+        )
+        subparser.add_argument(
             "-d",
             "--due",
             type=str,
@@ -87,6 +95,8 @@ class CreateTaskCommand(Command):
         task_args = {"title": args.title}
 
         # Prepare optional arguments
+        if args.notes:
+            task_args["notes"] = args.notes
         if args.due:
             task_args["due"] = args.due
         if args.snooze_until:
