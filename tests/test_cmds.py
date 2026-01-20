@@ -55,6 +55,7 @@ def test_create_task(commands):
         duration="2h15m",
         min_chunk_size="1h",
         max_chunk_size="2h",
+        notes="Some notes",
     )
 
     # Validate and run
@@ -97,9 +98,10 @@ def test_edit_task(commands, test_task):
         due="in 7 days",
         snooze_until="in 2 days",
         priority="P3",
-        duration="2h30m",
+        duration="4h",
         min_chunk_size="1h",
         max_chunk_size="2h",
+        notes="Some notes",
     )
 
     # Validate and run
