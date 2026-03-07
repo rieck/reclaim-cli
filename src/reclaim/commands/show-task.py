@@ -6,7 +6,7 @@ Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 from rich.console import Console
 from rich.table import Table
 
-from ..str import str_duration, str_task_status, str_tid
+from ..str import str_duration, str_task_id, str_task_status
 from ..utils import get_task
 from .base import Command
 
@@ -38,7 +38,7 @@ class ShowTaskCommand(Command):
     def run(self, args):
         """Show task at Reclaim.ai."""
         task = get_task(args.id)
-        tid = str_tid(task.id)
+        tid = str_task_id(task.id)
 
         # Get status
         status = task.status.lower().replace("_", " ")

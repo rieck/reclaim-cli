@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..parse import parse_list
-from ..str import str_duration, str_task_status, str_tid
+from ..str import str_duration, str_task_id, str_task_status
 from .base import Command
 
 
@@ -108,7 +108,7 @@ class ListTasksCommand(Command):
 
     def add_task(self, task, grid):
         """Format and add a task to the grid."""
-        short_id = str_tid(task.id)
+        short_id = str_task_id(task.id)
         due_date = task.due.strftime("%Y-%m-%d") if task.due else "anytime"
         time_required = task.time_chunks_required * 15
         time_spent = task.time_chunks_spent * 15

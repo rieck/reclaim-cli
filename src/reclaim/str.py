@@ -8,6 +8,22 @@ from reclaim_sdk.resources.task import TaskStatus
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"
 
+# Bijective scrambling on [0, 36^5): multiply by a constant coprime to 36^5.
+# 36^5 = 2^10 * 3^10, so any multiplier not divisible by 2 or 3 is coprime.
+_ID_MOD = 36**5  # 60_466_176
+_ID_MUL = 17_364_421  # prime, not divisible by 2 or 3
+_ID_INV = pow(_ID_MUL, -1, _ID_MOD)  # modular inverse
+
+
+def scramble_id(n):
+    """Bijectively scramble n within [0, 36^5)."""
+    return (n * _ID_MUL) % _ID_MOD
+
+
+def unscramble_id(n):
+    """Reverse scramble_id."""
+    return (n * _ID_INV) % _ID_MOD
+
 
 def str_duration(minutes):
     """Convert minutes to a duration string."""
@@ -40,8 +56,44 @@ def str_task_status(task):
     return f"{status}{prio}{extra}"
 
 
+def str_event_id(event):
+    """Convert an event resource ID to a compact prefixed string."""
+    reclaim_data = event.get("reclaimData") or {}
+    resource_id = reclaim_data.get("reclaimResourceId") or {}
+    id_type = resource_id.get("type")
+
+    if id_type == "TaskId":
+        return "t" + str_tid(scramble_id(resource_id["id"])).zfill(5)
+    elif id_type == "SmartSeriesId":
+        return "h" + str_tid(scramble_id(resource_id["seriesId"])).zfill(5)
+    elif id_type == "SchedulingLinkId":
+        numeric = int(resource_id["id"].replace("-", "")[:6], 16)
+        return "m" + str_tid(scramble_id(numeric)).zfill(5)
+    return "."
+
+
+def str_event_type(event):
+    """Convert an event type and priority to a compact string."""
+    type_chars = {
+        "TASK_ASSIGNMENT": "T",
+        "SMART_HABIT": "H",
+        "SCHEDULING_LINK_MEETING": "M",
+        "ONE_ON_ONE": "O",
+        "CONFERENCE_BUFFER": "C",
+    }
+
+    reclaim_data = event.get("reclaimData") or {}
+    event_type = reclaim_data.get("reclaimEventType", "")
+    priority = reclaim_data.get("priority", "")
+
+    type_char = type_chars.get(event_type, "E")
+    prio_digit = priority[1] if len(priority) == 2 else ""
+
+    return f"{type_char}{prio_digit}"
+
+
 def str_tid(task_id):
-    """Convert an identifier to a short string."""
+    """Convert an identifier to a base36 string."""
     if task_id == 0:
         return "0"
 
@@ -50,3 +102,8 @@ def str_tid(task_id):
         task_id, remainder = divmod(task_id, len(ID_CHARS))
         result = ID_CHARS[remainder] + result
     return result
+
+
+def str_task_id(task_id):
+    """Convert a task identifier to a prefixed display string."""
+    return "t" + str_tid(scramble_id(task_id)).zfill(5)

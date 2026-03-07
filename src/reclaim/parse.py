@@ -8,16 +8,20 @@ import re
 import dateparser
 from reclaim_sdk.resources.task import TaskPriority
 
+from .str import unscramble_id
+
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 
 def parse_tid(encoded):
-    """Convert a string to an identifier."""
+    """Convert a display ID string back to an integer identifier."""
+    if len(encoded) == 6 and encoded[0] in "thm":
+        encoded = encoded[1:]
     if not all(c in ID_CHARS for c in encoded):
         raise ValueError(f"Invalid characters in ID {encoded}")
     try:
-        return int(encoded, len(ID_CHARS))
+        return unscramble_id(int(encoded, len(ID_CHARS)))
     except ValueError:
         raise ValueError(f"Cannot decode ID {encoded}")
 
@@ -61,7 +65,7 @@ def parse_duration(time_str):
 
 def parse_datetime(str):
     """Parse a datetime string into a datetime object."""
-    dt = dateparser.parse(str)
+    dt = dateparser.parse(str, settings={"PREFER_DATES_FROM": "future"})
     if not dt:
         raise ValueError(f"Invalid datetime string: {str}")
     return dt

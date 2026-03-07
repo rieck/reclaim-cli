@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-03-07
+
+### Added
+
+- New `list-events` command (alias: `events`) to display calendar events
+- Compact event type codes (T=task, H=habit, M=meeting) with priority digit
+
+### Changed
+
+- IDs are now prefixed with type letter (`t`, `h`, `m`) across all views
+- IDs are bijectively scrambled so numerically close IDs appear unrelated
+- Date parsing now prefers future dates for weekday names (e.g. "Monday")
+
 ## [0.1.4] - 2026-01-21
 
 ### Added

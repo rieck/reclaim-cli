@@ -11,7 +11,7 @@ from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.exceptions import RecordNotFound
 from reclaim_sdk.resources.task import Task
 
-from .str import str_tid
+from .str import str_task_id
 
 
 class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
@@ -84,7 +84,7 @@ def get_task(task_id):
     try:
         task = Task.get(task_id)
     except RecordNotFound:
-        tid = str_tid(task_id)
+        tid = str_task_id(task_id)
         raise ValueError(f"Task not found: {tid}")
 
     return task
@@ -92,5 +92,5 @@ def get_task(task_id):
 
 def print_done(msg, task):
     """Print a message with the task id and title."""
-    tid = str_tid(task.id)
+    tid = str_task_id(task.id)
     print(f"✓ {msg} | Id: {tid} | Title: {task.title}")

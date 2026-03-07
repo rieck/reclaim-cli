@@ -9,7 +9,7 @@ from reclaim_sdk.resources.task import Task
 from rich.console import Console
 from rich.table import Table
 
-from ..str import str_tid
+from ..str import str_task_id
 from .base import Command
 
 
@@ -71,8 +71,10 @@ class ShowLoadCommand(Command):
     def format_task_list(self, tasks, cutoff=4):
         """Format list of task IDs."""
         if len(tasks) <= cutoff:
-            return " ".join(str_tid(t.id) for t in tasks)
-        return " ".join(str_tid(t.id) for t in tasks[: cutoff - 1]) + " ..."
+            return " ".join(str_task_id(t.id) for t in tasks)
+        return (
+            " ".join(str_task_id(t.id) for t in tasks[: cutoff - 1]) + " ..."
+        )
 
     def create_load_table(self):
         """Create table for workload display."""
