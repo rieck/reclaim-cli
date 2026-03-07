@@ -13,7 +13,7 @@ class StopTaskCommand(Command):
 
     name = "stop-task"
     description = "stop a task"
-    aliases = ["stop"]
+    aliases = []
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

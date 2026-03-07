@@ -11,19 +11,19 @@ usage: reclaim [options] <command> ...
 Reclaim CLI
 
 positional arguments:
-    add-time (add)         add time to a task
-    create-task (create)   create a task
-    delete-task (delete)   delete a task
-    edit-task (edit)       edit a task
-    list-events (events)   list calendar events
-    list-tasks (list)      list tasks
-    log-work (log)         log work to a task
-    mark-task (mark)       mark a task (in)complete
-    show-habit (habit)     show a habit
-    show-load (load)       show estimated workload
-    show-task (show)       show a task
-    start-task (start)     start a task
-    stop-task (stop)       stop a task
+    add-time            add time to a task
+    create-task         create a task
+    delete-task         delete a task
+    edit-task           edit a task
+    list-events         list calendar events
+    list-tasks          list tasks
+    log-work            log work to a task
+    mark-task           mark a task (in)complete
+    show-habit          show a habit
+    show-load           show estimated workload
+    show-task           show a task
+    start-task          start a task
+    stop-task           stop a task
 
 options:
   -h, --help            show this help message and exit
@@ -84,7 +84,7 @@ reclaim list-events --future 3
 # m3hsaa  2025-04-11  14:00   1h0m   M4   Team Meeting
 ```
 
-Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed to commands such as `show`, `edit`, or `start`, and habit IDs to `show-habit`:
+Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed to commands such as `show-task`, `edit-task`, or `start-task`, and habit IDs to `show-habit`:
 
 ```sh
 reclaim show-habit h2plta
@@ -128,6 +128,30 @@ isort src/
 flake8 src/
 pytest
 ```
+
+## Shell Completion
+
+The tool supports shell completion for commands, options, and — most usefully — task and habit IDs. To enable it, generate a completion script after installation.
+
+**Fish:**
+
+```sh
+register-python-argcomplete --shell fish reclaim > ~/.config/fish/completions/reclaim.fish
+```
+
+**Bash:**
+
+```sh
+echo 'eval "$(register-python-argcomplete reclaim)"' >> ~/.bashrc
+```
+
+**Zsh:**
+
+```sh
+echo 'eval "$(register-python-argcomplete reclaim)"' >> ~/.zshrc
+```
+
+Once activated, pressing `<Tab>` after a command that takes an ID will fetch and complete active task or habit IDs from your account.
 
 ## Dependencies
 

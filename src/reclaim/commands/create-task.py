@@ -14,7 +14,7 @@ class CreateTaskCommand(Command):
 
     name = "create-task"
     description = "create a task"
-    aliases = ["create"]
+    aliases = []
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
