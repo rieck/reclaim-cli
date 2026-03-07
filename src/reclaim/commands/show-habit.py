@@ -3,6 +3,9 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
+import importlib
+from datetime import date, timedelta
+
 from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.exceptions import RecordNotFound
 from rich.console import Console
@@ -77,7 +80,50 @@ class ShowHabitCommand(Command):
             "Updated:", fmt_date(habit.get("updated")), "Private:", private
         )
 
+        start = date.today()
+        end = start + timedelta(days=90)
+        events = client.get(
+            "/api/events/v2",
+            params={
+                "start": start.strftime("%Y-%m-%d"),
+                "end": end.strftime("%Y-%m-%d"),
+            },
+        )
+        occurrences = [
+            e
+            for e in events
+            if (e.get("reclaimData") or {})
+            .get("reclaimResourceId", {})
+            .get("type")
+            == "SmartSeriesId"
+            and e.get("title") == habit["title"]
+        ]
+        occurrences.sort(
+            key=lambda e: (e.get("eventDate") or {}).get("start", "")
+        )
+        has_more = len(occurrences) > 3
+        occurrences = occurrences[:3]
+
         console = Console()
         console.print(f"Habit {hid}: {habit['title']}", style="bold underline")
         console.print(grid)
+        if occurrences:
+            mod = importlib.import_module("reclaim.commands.list-events")
+            lec = mod.ListEventsCommand()
+            habit_lookup = {habit["title"]: habit["id"]}
+            occ_grid = Table(box=False, header_style="bold underline")
+            occ_grid.add_column("Id")
+            occ_grid.add_column("Date")
+            occ_grid.add_column("Start")
+            occ_grid.add_column("Dur", justify="right")
+            occ_grid.add_column("Type", justify="center")
+            occ_grid.add_column("Title")
+            console.print()
+            for e in occurrences:
+                lec.add_event(
+                    e, occ_grid, multi_day=True, habit_lookup=habit_lookup
+                )
+            if has_more:
+                occ_grid.add_row("...", "", "", "", "", "")
+            console.print(occ_grid)
         return habit

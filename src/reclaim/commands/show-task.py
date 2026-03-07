@@ -3,6 +3,9 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
+from datetime import date, timedelta
+
+from reclaim_sdk.client import ReclaimClient
 from rich.console import Console
 from rich.table import Table
 
@@ -103,6 +106,33 @@ class ShowTaskCommand(Command):
             "yes" if task.deferred else "no",
         )
 
+        # Fetch planned occurrences within the next 90 days
+        start = date.today()
+        end = start + timedelta(days=90)
+        client = ReclaimClient()
+        events = client.get(
+            "/api/events/v2",
+            params={
+                "start": start.strftime("%Y-%m-%d"),
+                "end": end.strftime("%Y-%m-%d"),
+            },
+        )
+        occurrences = [
+            e
+            for e in events
+            if (e.get("reclaimData") or {})
+            .get("reclaimResourceId", {})
+            .get("type")
+            == "TaskId"
+            and (e.get("reclaimData") or {})
+            .get("reclaimResourceId", {})
+            .get("id")
+            == task.id
+        ]
+        occurrences.sort(
+            key=lambda e: (e.get("eventDate") or {}).get("start", "")
+        )
+
         # Print table
         console = Console()
         console.print(f"Task {tid}: {task.title}", style="bold underline")
@@ -111,4 +141,20 @@ class ShowTaskCommand(Command):
             console.print()
             console.print("Notes:", style="bold")
             console.print(task.notes)
+        if occurrences:
+            import importlib
+
+            mod = importlib.import_module("reclaim.commands.list-events")
+            lec = mod.ListEventsCommand()
+            occ_grid = Table(box=False, header_style="bold underline")
+            occ_grid.add_column("Id")
+            occ_grid.add_column("Date")
+            occ_grid.add_column("Start")
+            occ_grid.add_column("Dur", justify="right")
+            occ_grid.add_column("Type", justify="center")
+            occ_grid.add_column("Title")
+            console.print()
+            for e in occurrences:
+                lec.add_event(e, occ_grid, multi_day=True)
+            console.print(occ_grid)
         return task
