@@ -144,6 +144,7 @@ class ShowTaskCommand(Command):
             console.print(task.notes)
         if occurrences:
             occ_grid = Table(box=False, header_style="bold underline")
+            occ_grid.add_column("")
             occ_grid.add_column("Id")
             occ_grid.add_column("Date")
             occ_grid.add_column("Start")

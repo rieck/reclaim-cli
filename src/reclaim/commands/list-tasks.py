@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..parse import parse_list
-from ..str import str_duration, str_task_id, str_task_status
+from ..str import str_duration, str_task_color, str_task_id, str_task_status
 from .base import Command
 
 
@@ -88,6 +88,7 @@ class ListTasksCommand(Command):
 
         grid = Table(box=False, header_style="bold underline")
 
+        grid.add_column("")
         grid.add_column("Id")
         grid.add_column("Due")
         grid.add_column("Left", justify="right")
@@ -116,6 +117,7 @@ class ListTasksCommand(Command):
         status = str_task_status(task)
 
         grid.add_row(
+            str_task_color(task),
             short_id,
             due_date,
             str_duration(time_required - time_spent),

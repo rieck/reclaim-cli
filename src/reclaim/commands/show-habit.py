@@ -111,6 +111,7 @@ class ShowHabitCommand(Command):
         if occurrences:
             habit_lookup = {habit["title"]: habit["id"]}
             occ_grid = Table(box=False, header_style="bold underline")
+            occ_grid.add_column("")
             occ_grid.add_column("Id")
             occ_grid.add_column("Date")
             occ_grid.add_column("Start")
@@ -123,6 +124,6 @@ class ShowHabitCommand(Command):
                     e, occ_grid, multi_day=True, habit_lookup=habit_lookup
                 )
             if has_more:
-                occ_grid.add_row("...", "", "", "", "", "")
+                occ_grid.add_row("", "...", "", "", "", "", "")
             console.print(occ_grid)
         return habit

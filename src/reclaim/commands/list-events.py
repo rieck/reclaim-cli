@@ -76,14 +76,25 @@ class ListEventsCommand(Command):
             params={
                 "start": start.strftime("%Y-%m-%d"),
                 "end": end.strftime("%Y-%m-%d"),
+                "allConnected": "true",
             },
         )
+        start_str = start.strftime("%Y-%m-%d")
+        end_str = end.strftime("%Y-%m-%d")
+        events = [
+            e
+            for e in events
+            if start_str
+            <= ((e.get("eventDate") or {}).get("start") or "")[:10]
+            < end_str
+        ]
         events.sort(key=lambda e: (e.get("eventDate") or {}).get("start", ""))
 
         habits = client.get("/api/assist/habits/daily")
         habit_lookup = {h["title"]: h["id"] for h in habits}
 
         grid = Table(box=False, header_style="bold underline")
+        grid.add_column("")
         grid.add_column("Id")
         if multi_day:
             grid.add_column("Date")

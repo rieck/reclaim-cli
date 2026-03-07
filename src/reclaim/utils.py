@@ -15,6 +15,7 @@ from .parse import parse_event_time
 from .str import (
     scramble_id,
     str_duration,
+    str_event_color,
     str_event_id,
     str_event_type,
     str_task_id,
@@ -106,6 +107,9 @@ def print_done(msg, task):
 
 def add_event_row(event, grid, multi_day, habit_lookup=None):
     """Format and add an event to a Rich table grid."""
+    if event.get("dateMode") == "ALL_DAY":
+        return
+
     title = event.get("title") or "Untitled"
 
     event_date = event.get("eventDate") or {}
@@ -129,7 +133,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None):
     else:
         duration = ""
 
-    row = [event_id]
+    row = [str_event_color(event), event_id]
     if multi_day:
         row.append(event_start.strftime("%Y-%m-%d") if event_start else "")
     row.append(event_start.strftime("%H:%M") if event_start else "")

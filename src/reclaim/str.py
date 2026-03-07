@@ -69,7 +69,40 @@ def str_event_id(event):
     elif id_type == "SchedulingLinkId":
         numeric = int(resource_id["id"].replace("-", "")[:6], 16)
         return "m" + str_tid(scramble_id(numeric)).zfill(5)
-    return "."
+    return ""
+
+
+# Google Calendar color name → hex
+_EVENT_COLORS = {
+    "TOMATO": "#D50000",
+    "FLAMINGO": "#E67C73",
+    "TANGERINE": "#F4511E",
+    "BANANA": "#F6BF26",
+    "SAGE": "#33B679",
+    "BASIL": "#0B8043",
+    "PEACOCK": "#039BE5",
+    "BLUEBERRY": "#3F51B5",
+    "LAVENDER": "#7986CB",
+    "GRAPE": "#8E24AA",
+    "GRAPHITE": "#616161",
+}
+
+
+def _color_dot(color):
+    """Return a Rich-markup colored dot for a color name."""
+    hex_color = _EVENT_COLORS.get(color or "", "#808080")
+    return f"[{hex_color}]●[/{hex_color}]"
+
+
+def str_event_color(event):
+    """Return a colored dot for an event."""
+    return _color_dot(event.get("color"))
+
+
+def str_task_color(task):
+    """Return a colored dot for a task."""
+    color = getattr(task, "event_color", None)
+    return _color_dot(color.value if color else None)
 
 
 def str_event_type(event):
@@ -80,6 +113,7 @@ def str_event_type(event):
         "SCHEDULING_LINK_MEETING": "M",
         "ONE_ON_ONE": "O",
         "CONFERENCE_BUFFER": "C",
+        "USER": "U",
     }
 
     reclaim_data = event.get("reclaimData") or {}
