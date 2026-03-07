@@ -10,7 +10,13 @@ from rich.console import Console
 from rich.table import Table
 
 from ..parse import parse_datetime
-from ..str import str_duration, str_event_id, str_event_type
+from ..str import (  # noqa: E501
+    scramble_id,
+    str_duration,
+    str_event_id,
+    str_event_type,
+    str_tid,
+)
 from .base import Command
 
 
@@ -80,6 +86,9 @@ class ListEventsCommand(Command):
         )
         events.sort(key=lambda e: (e.get("eventDate") or {}).get("start", ""))
 
+        habits = client.get("/api/assist/habits/daily")
+        habit_lookup = {h["title"]: h["id"] for h in habits}
+
         grid = Table(box=False, header_style="bold underline")
         grid.add_column("Id")
         if multi_day:
@@ -90,12 +99,12 @@ class ListEventsCommand(Command):
         grid.add_column("Title")
 
         for event in events:
-            self.add_event(event, grid, multi_day)
+            self.add_event(event, grid, multi_day, habit_lookup)
 
         Console().print(grid)
         return events
 
-    def add_event(self, event, grid, multi_day):
+    def add_event(self, event, grid, multi_day, habit_lookup=None):
         """Format and add an event to the grid."""
         title = event.get("title") or "Untitled"
 
@@ -103,7 +112,17 @@ class ListEventsCommand(Command):
         event_start = self._parse_time(event_date.get("start"))
         event_end = self._parse_time(event_date.get("end"))
 
-        event_id = str_event_id(event)
+        reclaim_data = event.get("reclaimData") or {}
+        resource_id = reclaim_data.get("reclaimResourceId") or {}
+        if resource_id.get("type") == "SmartSeriesId" and habit_lookup:
+            habit_id = habit_lookup.get(title)
+            event_id = (
+                "h" + str_tid(scramble_id(habit_id)).zfill(5)
+                if habit_id
+                else "."
+            )
+        else:
+            event_id = str_event_id(event)
 
         if event_start and event_end:
             duration = str_duration(

@@ -8,7 +8,7 @@
 - [X] Check out `rich` package for display functions
 - [x] Implement some test cases
 - [x] Improve packaging and maintance scripts
-- [ ] Implement load estimation (this week, next week, ...)
+- [x] Implement load estimation (this week, next week, ...)
 - [ ] Test better CLI interfaces: click or typer
 - [ ] Detect incorrect dates
 - [ ] Fix timezone madness when testing on Github

@@ -19,6 +19,7 @@ positional arguments:
     list-tasks (list)      list tasks
     log-work (log)         log work to a task
     mark-task (mark)       mark a task (in)complete
+    show-habit (habit)     show a habit
     show-load (load)       show estimated workload
     show-task (show)       show a task
     start-task (start)     start a task
@@ -58,7 +59,7 @@ reclaim create-task "Write new blog post" --duration 8h --due "in 10 days"
 # ✓ Created | Id: t3k9mw | Title: Write new blog post
 ```
 
-The output of the tool is shown as comment in the example. Task IDs are prefixed with `t` and use a scrambled base36 encoding. You can then list your tasks like this:
+The output of the tool is shown as comment in the example. You can then list your tasks like this:
 
 ```sh
 reclaim list-tasks
@@ -83,7 +84,17 @@ reclaim list-events --future 3
 # m3hsaa  2025-04-11  14:00   1h0m   M4   Team Meeting
 ```
 
-Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed directly to other commands such as `show`, `edit`, or `start`.
+Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed to commands such as `show`, `edit`, or `start`, and habit IDs to `show-habit`:
+
+```sh
+reclaim show-habit h2plta
+# Habit h2plta: 🍕 Lunch
+#    Status:       enabled        Priority:     P1
+#    Duration:     1h0m - 1h0m    Ideal time:   12:30
+#    Recurrence:   daily          Category:     personal
+#    Created:      2023-04-16     Defense:      high
+#    Updated:      2024-04-10     Private:      yes
+```
 
 Eventually, you notice that nobody reads blogs anymore, so you delete the task and move on:
 
