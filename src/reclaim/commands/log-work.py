@@ -3,6 +3,7 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
+from ..completers import task_ids
 from ..str import str_duration
 from ..utils import get_task, print_done
 from .base import Command
@@ -21,7 +22,7 @@ class LogWorkCommand(Command):
 
         subparser.add_argument(
             "id", type=str, metavar="<id>", help="task id to log work for"
-        )
+        ).completer = task_ids
         subparser.add_argument(
             "duration", type=str, metavar="<duration>", help="duration of work"
         )

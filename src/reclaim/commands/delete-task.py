@@ -3,6 +3,7 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
+from ..completers import task_ids
 from ..utils import get_task, print_done
 from .base import Command
 
@@ -20,7 +21,7 @@ class DeleteTaskCommand(Command):
 
         subparser.add_argument(
             "id", type=str, metavar="<id>", help="task id to delete"
-        )
+        ).completer = task_ids
 
         return subparser
 

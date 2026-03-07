@@ -7,6 +7,8 @@ import argparse
 import os
 import sys
 
+import argcomplete
+
 import reclaim.commands as commands
 from reclaim.utils import HelpFormatter, load_config, set_api_key
 
@@ -33,6 +35,9 @@ def parse_args(cmds):
     subparsers = parser.add_subparsers(dest="command", required=True)
     for cmd in cmds:
         cmd.parse_args(subparsers)
+
+    # Enable shell completion
+    argcomplete.autocomplete(parser)
 
     # Parse global args
     args = parser.parse_args()

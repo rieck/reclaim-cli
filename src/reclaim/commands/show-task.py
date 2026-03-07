@@ -9,6 +9,7 @@ from reclaim_sdk.client import ReclaimClient
 from rich.console import Console
 from rich.table import Table
 
+from ..completers import task_ids
 from ..str import str_duration, str_task_id, str_task_status
 from ..utils import add_event_row, get_task
 from .base import Command
@@ -27,7 +28,7 @@ class ShowTaskCommand(Command):
 
         subparser.add_argument(
             "id", type=str, metavar="<id>", help="task id to add time to"
-        )
+        ).completer = task_ids
 
         return subparser
 

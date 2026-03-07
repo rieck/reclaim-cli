@@ -10,6 +10,7 @@ from reclaim_sdk.exceptions import RecordNotFound
 from rich.console import Console
 from rich.table import Table
 
+from ..completers import habit_ids
 from ..str import str_duration, str_task_id
 from ..utils import add_event_row
 from .base import Command
@@ -27,7 +28,7 @@ class ShowHabitCommand(Command):
         subparser = super().parse_args(subparsers)
         subparser.add_argument(
             "id", type=str, metavar="<id>", help="habit id to show"
-        )
+        ).completer = habit_ids
         return subparser
 
     def validate_args(self, args):
