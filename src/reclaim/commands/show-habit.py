@@ -3,7 +3,6 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
-import importlib
 from datetime import date, timedelta
 
 from reclaim_sdk.client import ReclaimClient
@@ -12,6 +11,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..str import str_duration, str_task_id
+from ..utils import add_event_row
 from .base import Command
 
 
@@ -108,8 +108,6 @@ class ShowHabitCommand(Command):
         console.print(f"Habit {hid}: {habit['title']}", style="bold underline")
         console.print(grid)
         if occurrences:
-            mod = importlib.import_module("reclaim.commands.list-events")
-            lec = mod.ListEventsCommand()
             habit_lookup = {habit["title"]: habit["id"]}
             occ_grid = Table(box=False, header_style="bold underline")
             occ_grid.add_column("Id")
@@ -120,7 +118,7 @@ class ShowHabitCommand(Command):
             occ_grid.add_column("Title")
             console.print()
             for e in occurrences:
-                lec.add_event(
+                add_event_row(
                     e, occ_grid, multi_day=True, habit_lookup=habit_lookup
                 )
             if has_more:

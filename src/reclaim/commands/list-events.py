@@ -10,13 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..parse import parse_datetime
-from ..str import (  # noqa: E501
-    scramble_id,
-    str_duration,
-    str_event_id,
-    str_event_type,
-    str_tid,
-)
+from ..utils import add_event_row
 from .base import Command
 
 
@@ -99,52 +93,7 @@ class ListEventsCommand(Command):
         grid.add_column("Title")
 
         for event in events:
-            self.add_event(event, grid, multi_day, habit_lookup)
+            add_event_row(event, grid, multi_day, habit_lookup)
 
         Console().print(grid)
         return events
-
-    def add_event(self, event, grid, multi_day, habit_lookup=None):
-        """Format and add an event to the grid."""
-        title = event.get("title") or "Untitled"
-
-        event_date = event.get("eventDate") or {}
-        event_start = self._parse_time(event_date.get("start"))
-        event_end = self._parse_time(event_date.get("end"))
-
-        reclaim_data = event.get("reclaimData") or {}
-        resource_id = reclaim_data.get("reclaimResourceId") or {}
-        if resource_id.get("type") == "SmartSeriesId" and habit_lookup:
-            habit_id = habit_lookup.get(title)
-            event_id = (
-                "h" + str_tid(scramble_id(habit_id)).zfill(5)
-                if habit_id
-                else "."
-            )
-        else:
-            event_id = str_event_id(event)
-
-        if event_start and event_end:
-            duration = str_duration(
-                int((event_end - event_start).total_seconds() / 60)
-            )
-        else:
-            duration = ""
-
-        row = [event_id]
-        if multi_day:
-            row.append(event_start.strftime("%Y-%m-%d") if event_start else "")
-        row.append(event_start.strftime("%H:%M") if event_start else "")
-        row.append(duration)
-        row.append(str_event_type(event))
-        row.append(title)
-
-        grid.add_row(*row)
-
-    def _parse_time(self, value):
-        """Parse an ISO timestamp string to a datetime object."""
-        if not value or not isinstance(value, str):
-            return None
-        from dateparser import parse
-
-        return parse(value)

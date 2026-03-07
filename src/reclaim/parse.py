@@ -79,3 +79,10 @@ def parse_priority(priority):
     if not priority[1:].isdigit():
         raise ValueError(f"Invalid priority: {priority}")
     return TaskPriority(priority)
+
+
+def parse_event_time(value):
+    """Parse an ISO timestamp string to a datetime object."""
+    if not value or not isinstance(value, str):
+        return None
+    return dateparser.parse(value)

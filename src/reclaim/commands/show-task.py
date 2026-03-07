@@ -10,7 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..str import str_duration, str_task_id, str_task_status
-from ..utils import get_task
+from ..utils import add_event_row, get_task
 from .base import Command
 
 
@@ -142,10 +142,6 @@ class ShowTaskCommand(Command):
             console.print("Notes:", style="bold")
             console.print(task.notes)
         if occurrences:
-            import importlib
-
-            mod = importlib.import_module("reclaim.commands.list-events")
-            lec = mod.ListEventsCommand()
             occ_grid = Table(box=False, header_style="bold underline")
             occ_grid.add_column("Id")
             occ_grid.add_column("Date")
@@ -155,6 +151,6 @@ class ShowTaskCommand(Command):
             occ_grid.add_column("Title")
             console.print()
             for e in occurrences:
-                lec.add_event(e, occ_grid, multi_day=True)
+                add_event_row(e, occ_grid, multi_day=True)
             console.print(occ_grid)
         return task

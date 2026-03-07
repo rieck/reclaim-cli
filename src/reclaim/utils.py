@@ -11,7 +11,15 @@ from reclaim_sdk.client import ReclaimClient
 from reclaim_sdk.exceptions import RecordNotFound
 from reclaim_sdk.resources.task import Task
 
-from .str import str_task_id
+from .parse import parse_event_time
+from .str import (
+    scramble_id,
+    str_duration,
+    str_event_id,
+    str_event_type,
+    str_task_id,
+    str_tid,
+)
 
 
 class HelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
@@ -94,3 +102,39 @@ def print_done(msg, task):
     """Print a message with the task id and title."""
     tid = str_task_id(task.id)
     print(f"✓ {msg} | Id: {tid} | Title: {task.title}")
+
+
+def add_event_row(event, grid, multi_day, habit_lookup=None):
+    """Format and add an event to a Rich table grid."""
+    title = event.get("title") or "Untitled"
+
+    event_date = event.get("eventDate") or {}
+    event_start = parse_event_time(event_date.get("start"))
+    event_end = parse_event_time(event_date.get("end"))
+
+    reclaim_data = event.get("reclaimData") or {}
+    resource_id = reclaim_data.get("reclaimResourceId") or {}
+    if resource_id.get("type") == "SmartSeriesId" and habit_lookup:
+        habit_id = habit_lookup.get(title)
+        event_id = (
+            "h" + str_tid(scramble_id(habit_id)).zfill(5) if habit_id else "."
+        )
+    else:
+        event_id = str_event_id(event)
+
+    if event_start and event_end:
+        duration = str_duration(
+            int((event_end - event_start).total_seconds() / 60)
+        )
+    else:
+        duration = ""
+
+    row = [event_id]
+    if multi_day:
+        row.append(event_start.strftime("%Y-%m-%d") if event_start else "")
+    row.append(event_start.strftime("%H:%M") if event_start else "")
+    row.append(duration)
+    row.append(str_event_type(event))
+    row.append(title)
+
+    grid.add_row(*row)
