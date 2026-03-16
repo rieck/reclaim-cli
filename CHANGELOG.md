@@ -5,20 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-03-16
+
+### Added
+
+- `config` command to generate a `~/.reclaim` template with calendars
+- Calendar color mapping for user events via `~/.reclaim` config
+- Color highlighting for event type and task state columns
+- Short aliases for all commands (shown in per-command `--help`)
+
 ## [0.2.1] - 2026-03-07
 
 ### Added
 
-- External calendar events (Google Calendar) shown in `list-events` via `allConnected` flag
+- External calendar events shown in `list-events`
 - `U` event type code for external user calendar events
 - Colored dot column (●) before titles in `list-events` and `list-tasks`
-- Planned occurrences shown in `show-habit` command (next 3, with `...` if more)
+- Planned occurrences shown in `show-habit` command
 - Shell completion for task and habit IDs via `argcomplete`
 
 ### Changed
 
-- Colored dot column moved to the first column in all event and task listings
-- Event color falls back to gray dot when no color is set
+- Colored dot column moved to the first column in all listings
 - Full-day events filtered out from `list-events`
 - Events outside the requested date range filtered from API response
 - Removed command aliases

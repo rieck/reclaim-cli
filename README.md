@@ -31,7 +31,7 @@ options:
   -c, --config <file>   set config file (default: ~/.reclaim)
 ```
 
-Each command can be extended with its further options. Simply run `reclaim <command> --help` to the see available options for a command. 
+Each command can be extended with its further options. Simply run `reclaim <command> --help` to see the available options. Most commands also have a short alias (e.g. `tasks`, `events`, `load`, `create`, `edit`) — run `reclaim <command> --help` to see the alias for each command.
 
 ## Authentication
 
@@ -100,7 +100,7 @@ reclaim list-tasks
 #  ●  t3k9mw  2025-04-13   8h0m    0%   N3    Write new blog post
 ```
 
-Your task has state `N` (new) with default priority 3. Later, you realize that you need less time for the task. Simply update it using its identifier:
+Your task has state `N` (new) with default priority `3`. The state column is colored yellow for at-risk tasks and red for overdue tasks. Later, you realize that you need less time for the task. Simply update it using its identifier:
 
 ```sh
 reclaim edit-task t3k9mw --duration 4h
@@ -117,7 +117,7 @@ reclaim list-events --future 3
 #  ●  m3hsaa  2025-04-11  14:00   1h0m   M4   Team Meeting
 ```
 
-Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed to commands such as `show-task`, `edit-task`, or `start-task`, and habit IDs to `show-habit`:
+Events are shown with a compact type code: `T` for tasks, `H` for habits, `U` for user calendar events, `M` for meetings, each followed by the priority digit. The type column is colored using the event or calendar color. The ID column links events back to their source — task IDs can be passed to commands such as `show-task`, `edit-task`, or `start-task`, and habit IDs to `show-habit`:
 
 ```sh
 reclaim show-habit h2plta
