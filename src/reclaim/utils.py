@@ -111,6 +111,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
     if event.get("dateMode") == "ALL_DAY":
         return
 
+    raw_title = event.get("title") or "Untitled"
     title = str_event_title(event, calendars)
 
     event_date = event.get("eventDate") or {}
@@ -120,7 +121,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
     reclaim_data = event.get("reclaimData") or {}
     resource_id = reclaim_data.get("reclaimResourceId") or {}
     if resource_id.get("type") == "SmartSeriesId" and habit_lookup:
-        habit_id = habit_lookup.get(title)
+        habit_id = habit_lookup.get(raw_title)
         event_id = (
             "h" + str_tid(scramble_id(habit_id)).zfill(5) if habit_id else "."
         )
