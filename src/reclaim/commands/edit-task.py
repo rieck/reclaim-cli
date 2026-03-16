@@ -13,7 +13,7 @@ class EditTaskCommand(Command):
 
     name = "edit-task"
     description = "edit a task"
-    aliases = []
+    aliases = ["edit"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

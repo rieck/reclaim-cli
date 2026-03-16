@@ -20,8 +20,8 @@ class ShowTaskCommand(Command):
 
     name = "show-task"
     description = "show a task"
-    aliases = []
-    hidden = True
+    aliases = ["task"]
+    hidden = False
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

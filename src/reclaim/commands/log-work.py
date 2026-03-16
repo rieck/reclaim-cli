@@ -14,7 +14,7 @@ class LogWorkCommand(Command):
 
     name = "log-work"
     description = "log work to a task"
-    aliases = []
+    aliases = ["log"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

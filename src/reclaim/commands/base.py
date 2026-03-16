@@ -17,9 +17,13 @@ class Command(object):
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
+        epilog = (
+            "aliases: " + ", ".join(self.aliases) if self.aliases else None
+        )
         subparser = subparsers.add_parser(
             self.name,
             help=self.description,
+            epilog=epilog,
             formatter_class=HelpFormatter,
         )
         subparser.set_defaults(func=self.run)

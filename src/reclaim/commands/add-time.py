@@ -14,7 +14,7 @@ class AddTimeCommand(Command):
 
     name = "add-time"
     description = "add time to a task"
-    aliases = []
+    aliases = ["add"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

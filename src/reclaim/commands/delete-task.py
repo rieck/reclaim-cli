@@ -13,7 +13,7 @@ class DeleteTaskCommand(Command):
 
     name = "delete-task"
     description = "delete a task"
-    aliases = []
+    aliases = ["del"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

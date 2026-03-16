@@ -13,7 +13,7 @@ class MarkTaskCommand(Command):
 
     name = "mark-task"
     description = "mark a task (in)complete"
-    aliases = []
+    aliases = ["mark"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
