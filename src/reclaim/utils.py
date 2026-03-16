@@ -17,7 +17,6 @@ from .str import (
     str_duration,
     str_event_color,
     str_event_id,
-    str_event_title,
     str_event_type,
     str_task_id,
     str_tid,
@@ -112,7 +111,6 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
         return
 
     raw_title = event.get("title") or "Untitled"
-    title = str_event_title(event, calendars)
 
     event_date = event.get("eventDate") or {}
     event_start = parse_event_time(event_date.get("start"))
@@ -140,7 +138,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
         row.append(event_start.strftime("%Y-%m-%d") if event_start else "")
     row.append(event_start.strftime("%H:%M") if event_start else "")
     row.append(duration)
-    row.append(str_event_type(event))
-    row.append(title)
+    row.append(str_event_type(event, calendars))
+    row.append(raw_title)
 
     grid.add_row(*row)

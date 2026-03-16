@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from ..parse import parse_list
-from ..str import str_duration, str_task_color, str_task_id, str_task_status
+from ..str import str_duration, str_task_color, str_task_id, str_task_state
 from .base import Command
 
 
@@ -114,15 +114,13 @@ class ListTasksCommand(Command):
         time_required = task.time_chunks_required * 15
         time_spent = task.time_chunks_spent * 15
         progress = 1 if time_required == 0 else time_spent / time_required
-        status = str_task_status(task)
-
         grid.add_row(
             str_task_color(task),
             short_id,
             due_date,
             str_duration(time_required - time_spent),
             f"{progress:.0%}",
-            status,
+            str_task_state(task),
             task.title,
         )
 

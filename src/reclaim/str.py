@@ -122,15 +122,6 @@ def str_event_color(event, calendars=None):
     return _color_dot(_event_hex_color(event, calendars))
 
 
-def str_event_title(event, calendars=None):
-    """Return the event title, colored by event or calendar color."""
-    title = event.get("title") or "Untitled"
-    hex_color = _event_hex_color(event, calendars)
-    if not hex_color:
-        return title
-    return f"[{hex_color}]{title}[/{hex_color}]"
-
-
 def str_task_color(task):
     """Return a colored dot for a task."""
     color = getattr(task, "event_color", None)
@@ -139,8 +130,8 @@ def str_task_color(task):
     )
 
 
-def str_event_type(event):
-    """Convert an event type and priority to a compact string."""
+def str_event_type(event, calendars=None):
+    """Convert an event type and priority to a compact colored string."""
     type_chars = {
         "TASK_ASSIGNMENT": "T",
         "SMART_HABIT": "H",
@@ -156,8 +147,12 @@ def str_event_type(event):
 
     type_char = type_chars.get(event_type, "E")
     prio_digit = priority[1] if len(priority) == 2 else ""
+    label = f"{type_char}{prio_digit}"
 
-    return f"{type_char}{prio_digit}"
+    hex_color = _event_hex_color(event, calendars)
+    if not hex_color:
+        return label
+    return f"[{hex_color}]{label}[/{hex_color}]"
 
 
 def str_tid(task_id):
@@ -175,3 +170,22 @@ def str_tid(task_id):
 def str_task_id(task_id):
     """Convert a task identifier to a prefixed display string."""
     return "t" + str_tid(scramble_id(task_id)).zfill(5)
+
+
+def str_habit_id(habit_id):
+    """Convert a habit identifier to a prefixed display string."""
+    return "h" + str_tid(scramble_id(habit_id)).zfill(5)
+
+
+def str_task_state(task):
+    """Return the task state string, colored by urgency."""
+    from datetime import datetime, timezone
+
+    state = str_task_status(task)
+    if task.due and task.due < datetime.now(timezone.utc):
+        c = _EVENT_COLORS["TOMATO"]
+    elif task.at_risk:
+        c = _EVENT_COLORS["BANANA"]
+    else:
+        return state
+    return f"[{c}]{state}[/{c}]"
