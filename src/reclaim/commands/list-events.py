@@ -103,8 +103,9 @@ class ListEventsCommand(Command):
         grid.add_column("Type", justify="center")
         grid.add_column("Title")
 
+        calendars = getattr(args, "calendars", None)
         for event in events:
-            add_event_row(event, grid, multi_day, habit_lookup)
+            add_event_row(event, grid, multi_day, habit_lookup, calendars)
 
         Console().print(grid)
         return events

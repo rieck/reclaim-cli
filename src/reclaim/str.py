@@ -94,9 +94,22 @@ def _color_dot(color):
     return f"[{hex_color}]●[/{hex_color}]"
 
 
-def str_event_color(event):
+def str_event_color(event, calendars=None):
     """Return a colored dot for an event."""
-    return _color_dot(event.get("color"))
+    color = event.get("color")
+    if not color:
+        reclaim_data = event.get("reclaimData") or {}
+        if reclaim_data.get("reclaimEventType") == "USER":
+            cal_id = str(event.get("calendarId", ""))
+            cal_info = (
+                (calendars or {}).get(int(cal_id))
+                or (calendars or {}).get(cal_id)
+                or {}
+            )
+            raw = cal_info.get("color") or ""
+            hex_color = _EVENT_COLORS.get(raw.upper()) or raw or "#808080"
+            return f"[{hex_color}]●[/{hex_color}]"
+    return _color_dot(color)
 
 
 def str_task_color(task):

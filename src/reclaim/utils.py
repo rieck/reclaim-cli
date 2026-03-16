@@ -105,7 +105,7 @@ def print_done(msg, task):
     print(f"✓ {msg} | Id: {tid} | Title: {task.title}")
 
 
-def add_event_row(event, grid, multi_day, habit_lookup=None):
+def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
     """Format and add an event to a Rich table grid."""
     if event.get("dateMode") == "ALL_DAY":
         return
@@ -133,7 +133,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None):
     else:
         duration = ""
 
-    row = [str_event_color(event), event_id]
+    row = [str_event_color(event, calendars), event_id]
     if multi_day:
         row.append(event_start.strftime("%Y-%m-%d") if event_start else "")
     row.append(event_start.strftime("%H:%M") if event_start else "")
