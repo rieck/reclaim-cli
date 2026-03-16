@@ -13,6 +13,7 @@ class Command(object):
     name = None  # Command name
     description = None  # Command description
     aliases = []  # Command aliases
+    hidden = False  # Hide from help
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
@@ -24,6 +25,8 @@ class Command(object):
         subparser.set_defaults(func=self.run)
         for alias in self.aliases:
             subparsers._name_parser_map[alias] = subparser
+        if self.hidden:
+            subparsers._choices_actions.pop()
         return subparser
 
     def run(self, args):

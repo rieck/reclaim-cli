@@ -22,6 +22,7 @@ class ShowHabitCommand(Command):
     name = "show-habit"
     description = "show a habit"
     aliases = []
+    hidden = True
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
