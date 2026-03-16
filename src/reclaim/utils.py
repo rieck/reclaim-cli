@@ -121,7 +121,9 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
     if resource_id.get("type") == "SmartSeriesId" and habit_lookup:
         habit_id = habit_lookup.get(raw_title)
         event_id = (
-            "h" + str_tid(scramble_id(habit_id)).zfill(5) if habit_id else "."
+            "h" + str_tid(scramble_id(habit_id)).zfill(5)
+            if habit_id
+            else str_event_id(event)
         )
     else:
         event_id = str_event_id(event)
