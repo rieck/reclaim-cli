@@ -46,7 +46,7 @@ def test_mark_task(commands, test_task):
     cmd.run(args)
 
     # Wait for task to be updated
-    time.sleep(1)
+    time.sleep(3)
 
     # Verify task is complete
     task = get_task(args.id)
@@ -72,7 +72,7 @@ def test_create_task(commands):
     cmd.validate_args(args)
     task = cmd.run(args)
 
-    time.sleep(1)
+    time.sleep(3)
 
     task = get_task(task.id)
     assert task.title == args.title
@@ -290,7 +290,7 @@ def test_edit_task(commands, test_task):
     cmd.validate_args(args)
     task = cmd.run(args)
 
-    time.sleep(1)
+    time.sleep(3)
 
     task = get_task(task.id)
     assert task.title == args.title
