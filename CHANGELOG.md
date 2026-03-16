@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.3] - 2026-03-16
 
+### Fixed
+
+- Missing event ID for habits not found in the daily habits lookup
+
 ### Changed
 
 - Color palette is brightened automatically on dark terminal backgrounds
