@@ -3,7 +3,65 @@
 Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 """
 
+import os
+import select
+import sys
+import termios
+import tty
+
 from reclaim_sdk.resources.task import TaskStatus
+
+
+def is_dark_terminal():
+    """Detect whether the terminal has a dark background.
+
+    Tries two methods in order:
+    1. OSC 11 escape sequence - queries the terminal for its actual background
+       color (requires a real TTY, times out after 0.1s if unsupported).
+    2. $COLORFGBG env var - set by some terminals (rxvt, konsole, etc.) in
+       "fg;bg" format where bg < 8 means dark.
+
+    Returns True for dark, False for light, None if undetermined.
+    """
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        try:
+            fd = sys.stdin.fileno()
+            old = termios.tcgetattr(fd)
+            try:
+                tty.setraw(fd)
+                sys.stdout.write("\033]11;?\033\\")
+                sys.stdout.flush()
+                if select.select([sys.stdin], [], [], 0.1)[0]:
+                    response = ""
+                    while select.select([sys.stdin], [], [], 0.05)[0]:
+                        response += sys.stdin.read(1)
+                    if "rgb:" in response:
+                        rgb_part = response.split("rgb:")[1].rstrip("\\\x1b\a")
+                        r, g, b = (int(c[:2], 16) for c in rgb_part.split("/"))
+                        return (r + g + b) < 384  # 128 * 3
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old)
+        except Exception:
+            pass
+
+    colorfgbg = os.environ.get("COLORFGBG", "")
+    if colorfgbg:
+        try:
+            return int(colorfgbg.split(";")[-1]) < 8
+        except ValueError:
+            pass
+
+    return None
+
+
+def _brighten(hex_color, amount=50):
+    """Brighten a hex color by adding a fixed amount to each channel."""
+    h = hex_color.lstrip("#")
+    r = min(255, int(h[0:2], 16) + amount)
+    g = min(255, int(h[2:4], 16) + amount)
+    b = min(255, int(h[4:6], 16) + amount)
+    return f"#{r:02X}{g:02X}{b:02X}"
+
 
 # Base36 character set
 ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -86,6 +144,10 @@ _EVENT_COLORS = {
     "GRAPE": "#8E24AA",
     "GRAPHITE": "#616161",
 }
+
+_DARK_TERMINAL = is_dark_terminal()
+if _DARK_TERMINAL:
+    _EVENT_COLORS = {k: _brighten(v) for k, v in _EVENT_COLORS.items()}
 
 
 def _resolve_color(raw, default=""):
