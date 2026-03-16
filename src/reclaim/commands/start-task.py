@@ -13,7 +13,7 @@ class StartTaskCommand(Command):
 
     name = "start-task"
     description = "start a task"
-    aliases = []
+    aliases = ["start"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

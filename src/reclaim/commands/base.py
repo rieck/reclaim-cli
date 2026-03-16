@@ -19,10 +19,11 @@ class Command(object):
         subparser = subparsers.add_parser(
             self.name,
             help=self.description,
-            aliases=self.aliases,
             formatter_class=HelpFormatter,
         )
         subparser.set_defaults(func=self.run)
+        for alias in self.aliases:
+            subparsers._name_parser_map[alias] = subparser
         return subparser
 
     def run(self, args):

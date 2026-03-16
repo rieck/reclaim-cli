@@ -17,7 +17,7 @@ class ListTasksCommand(Command):
 
     name = "list-tasks"
     description = "list tasks"
-    aliases = []
+    aliases = ["tasks"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

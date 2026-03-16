@@ -19,7 +19,7 @@ class ListEventsCommand(Command):
 
     name = "list-events"
     description = "list calendar events"
-    aliases = []
+    aliases = ["events"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""

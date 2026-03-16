@@ -18,7 +18,7 @@ class ShowLoadCommand(Command):
 
     name = "show-load"
     description = "show estimated workload"
-    aliases = []
+    aliases = ["load"]
 
     def parse_args(self, subparsers):
         """Add arguments to the subparser."""
