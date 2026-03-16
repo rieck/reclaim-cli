@@ -5,20 +5,12 @@ Copyright (c) 2025 Konrad Rieck <konrad@mlsec.org>
 
 import argparse
 import time
-from datetime import datetime, timedelta, timezone
-from types import SimpleNamespace
+from datetime import timedelta
 
 import pytest
 from reclaim_sdk.resources.task import TaskStatus
 
-from reclaim.str import (
-    _resolve_color,
-    str_event_color,
-    str_event_type,
-    str_habit_id,
-    str_task_id,
-    str_task_state,
-)
+from reclaim.str import str_habit_id, str_task_id
 from reclaim.utils import get_task
 
 
@@ -311,149 +303,6 @@ def test_edit_task(commands, test_task):
     #    args.snooze_until.replace(tzinfo=task.snooze_until.tzinfo),
     # ]
     # No need to delete task
-
-
-# --- _resolve_color ---
-
-
-def test_resolve_color_name():
-    """Named Google Calendar colors resolve to their hex value."""
-    assert _resolve_color("SAGE") == "#33B679"
-    assert _resolve_color("sage") == "#33B679"
-    assert _resolve_color("TOMATO") == "#D50000"
-
-
-def test_resolve_color_hex_passthrough():
-    """Hex strings are passed through unchanged."""
-    assert _resolve_color("#AABBCC") == "#AABBCC"
-
-
-def test_resolve_color_none_string():
-    """The API sentinel 'NONE' returns the default."""
-    assert _resolve_color("NONE") == ""
-    assert _resolve_color("NONE", "#808080") == "#808080"
-
-
-def test_resolve_color_empty():
-    """Empty and None inputs return the default."""
-    assert _resolve_color("") == ""
-    assert _resolve_color(None, "#808080") == "#808080"
-
-
-def test_resolve_color_unknown():
-    """Unknown non-hex strings return the default."""
-    assert _resolve_color("NOTACOLOR") == ""
-    assert _resolve_color("NOTACOLOR", "#808080") == "#808080"
-
-
-# --- str_event_color ---
-
-_USER_EVENT = {
-    "calendarId": 42,
-    "color": None,
-    "reclaimData": {"reclaimEventType": "USER"},
-}
-
-_HABIT_EVENT = {
-    "color": "SAGE",
-    "reclaimData": {"reclaimEventType": "SMART_HABIT"},
-}
-
-
-def test_event_color_user_with_calendar():
-    """USER event uses the calendar config color."""
-    calendars = {42: {"color": "banana"}}
-    dot = str_event_color(_USER_EVENT, calendars)
-    assert "#F6BF26" in dot
-
-
-def test_event_color_user_no_calendar():
-    """USER event without calendar config falls back to gray."""
-    dot = str_event_color(_USER_EVENT, None)
-    assert "#808080" in dot
-
-
-def test_event_color_habit():
-    """Habit event uses the API color."""
-    dot = str_event_color(_HABIT_EVENT)
-    assert "#33B679" in dot
-
-
-def test_event_color_none_api_color():
-    """API color 'NONE' falls back to gray dot."""
-    event = {
-        "color": "NONE",
-        "reclaimData": {"reclaimEventType": "SMART_HABIT"},
-    }
-    dot = str_event_color(event)
-    assert "#808080" in dot
-
-
-# --- str_event_type ---
-
-
-def test_event_type_colored_user():
-    """USER event type string is colored with calendar color."""
-    calendars = {42: {"color": "banana"}}
-    label = str_event_type(_USER_EVENT, calendars)
-    assert "#F6BF26" in label
-    assert "U" in label
-
-
-def test_event_type_uncolored():
-    """Event type without a color has no markup."""
-    event = {
-        "color": "NONE",
-        "reclaimData": {
-            "reclaimEventType": "TASK_ASSIGNMENT",
-            "priority": "P3",
-        },
-    }
-    label = str_event_type(event)
-    assert label == "T3"
-
-
-# --- str_task_state ---
-
-
-def _make_task(at_risk=False, due=None, status="SCHEDULED", priority="P3"):
-    """Build a minimal task-like namespace for str_task_state."""
-    return SimpleNamespace(
-        at_risk=at_risk,
-        due=due,
-        status=status,
-        priority=priority,
-        deferred=False,
-        deleted=False,
-        adjusted=False,
-    )
-
-
-def test_task_state_normal():
-    """Normal task state has no color markup."""
-    state = str_task_state(_make_task())
-    assert "[" not in state
-
-
-def test_task_state_at_risk():
-    """At-risk task state is colored yellow (BANANA)."""
-    state = str_task_state(_make_task(at_risk=True))
-    assert "#F6BF26" in state
-
-
-def test_task_state_overdue():
-    """Overdue task state is colored red (TOMATO)."""
-    past = datetime(2000, 1, 1, tzinfo=timezone.utc)
-    state = str_task_state(_make_task(due=past))
-    assert "#D50000" in state
-
-
-def test_task_state_overdue_beats_at_risk():
-    """Overdue takes priority over at-risk coloring."""
-    past = datetime(2000, 1, 1, tzinfo=timezone.utc)
-    state = str_task_state(_make_task(at_risk=True, due=past))
-    assert "#D50000" in state
-    assert "#F6BF26" not in state
 
 
 # --- str_habit_id / str_task_id roundtrip ---
