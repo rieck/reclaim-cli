@@ -17,6 +17,7 @@ from .str import (
     str_duration,
     str_event_color,
     str_event_id,
+    str_event_title,
     str_event_type,
     str_task_id,
     str_tid,
@@ -110,7 +111,7 @@ def add_event_row(event, grid, multi_day, habit_lookup=None, calendars=None):
     if event.get("dateMode") == "ALL_DAY":
         return
 
-    title = event.get("title") or "Untitled"
+    title = str_event_title(event, calendars)
 
     event_date = event.get("eventDate") or {}
     event_start = parse_event_time(event_date.get("start"))

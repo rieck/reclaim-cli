@@ -88,34 +88,55 @@ _EVENT_COLORS = {
 }
 
 
-def _color_dot(color):
-    """Return a Rich-markup colored dot for a color name."""
-    hex_color = _EVENT_COLORS.get(color or "", "#808080")
-    return f"[{hex_color}]●[/{hex_color}]"
+def _resolve_color(raw, default=""):
+    """Resolve a Google Calendar color name or hex string to a hex value."""
+    if not raw or raw.upper() == "NONE":
+        return default
+    return _EVENT_COLORS.get(raw.upper()) or (
+        raw if raw.startswith("#") else default
+    )
+
+
+def _color_dot(hex_color):
+    """Return a Rich-markup colored dot for a hex color."""
+    c = hex_color or "#808080"
+    return f"[{c}]●[/{c}]"
+
+
+def _event_hex_color(event, calendars=None):
+    """Return the hex color for an event, empty string if uncolored."""
+    reclaim_data = event.get("reclaimData") or {}
+    if reclaim_data.get("reclaimEventType") == "USER":
+        cal_id = str(event.get("calendarId", ""))
+        cal_info = (
+            (calendars or {}).get(int(cal_id))
+            or (calendars or {}).get(cal_id)
+            or {}
+        )
+        return _resolve_color(cal_info.get("color"), "#808080")
+    return _resolve_color(event.get("color"))
 
 
 def str_event_color(event, calendars=None):
     """Return a colored dot for an event."""
-    color = event.get("color")
-    if not color:
-        reclaim_data = event.get("reclaimData") or {}
-        if reclaim_data.get("reclaimEventType") == "USER":
-            cal_id = str(event.get("calendarId", ""))
-            cal_info = (
-                (calendars or {}).get(int(cal_id))
-                or (calendars or {}).get(cal_id)
-                or {}
-            )
-            raw = cal_info.get("color") or ""
-            hex_color = _EVENT_COLORS.get(raw.upper()) or raw or "#808080"
-            return f"[{hex_color}]●[/{hex_color}]"
-    return _color_dot(color)
+    return _color_dot(_event_hex_color(event, calendars))
+
+
+def str_event_title(event, calendars=None):
+    """Return the event title, colored by event or calendar color."""
+    title = event.get("title") or "Untitled"
+    hex_color = _event_hex_color(event, calendars)
+    if not hex_color:
+        return title
+    return f"[{hex_color}]{title}[/{hex_color}]"
 
 
 def str_task_color(task):
     """Return a colored dot for a task."""
     color = getattr(task, "event_color", None)
-    return _color_dot(color.value if color else None)
+    return _color_dot(
+        _resolve_color(color.value if color else None, "#808080")
+    )
 
 
 def str_event_type(event):
