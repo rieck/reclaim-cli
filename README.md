@@ -12,6 +12,7 @@ Reclaim CLI
 
 positional arguments:
     add-time            add time to a task
+    config              show config template
     create-task         create a task
     delete-task         delete a task
     edit-task           edit a task
@@ -50,6 +51,38 @@ $ export RECLAIM_TOKEN=<token>
 
 This ensures the tool can securely authenticate and interact with your Reclaim.ai account.
 
+## Configuration
+
+The configuration file `~/.reclaim` is a YAML file. The only required field is the API token:
+
+```yaml
+reclaim_token: <token>
+```
+
+### Calendar Colors
+
+User events (type `U`) are fetched from your connected Google calendars. Since the Reclaim API does not expose calendar names, you can map calendar IDs to a name and color in the configuration file. Run `reclaim config` to generate a template with the calendar IDs discovered from your recent events:
+
+```console
+$ reclaim config
+# Reclaim CLI configuration (~/.reclaim)
+
+reclaim_token: <token>
+
+# Available calendars:
+calendars:
+  123456:  # Next event: Team Meeting
+    name:
+    color: sage
+  789012:  # Next event: Lunch with Alice
+    name:
+    color: sage
+
+# Available colors: tomato, flamingo, tangerine, banana, sage, basil, peacock, blueberry, lavender, grape, graphite
+```
+
+Fill in the `name` and `color` fields for each calendar. Color names follow the Google Calendar palette. Hex colors (e.g. `#33B679`) are also accepted. Once configured, user event dots and titles in `list-events` are colored accordingly.
+
 ## Example
 
 Here is a simple example illustrating how to use the tool. Suppose you want to create a task for writing a new blog post with a duration of 8 hours and a due date in 10 days. You would run:
@@ -63,8 +96,8 @@ The output of the tool is shown as comment in the example. You can then list you
 
 ```sh
 reclaim list-tasks
-# Id      Due          Left   Prog  State  Title
-# t3k9mw  2025-04-13   8h0m    0%   N3     Write new blog post
+#     Id      Due          Left  Prog  State  Title
+#  ●  t3k9mw  2025-04-13   8h0m    0%   N3    Write new blog post
 ```
 
 Your task has state `N` (new) with default priority 3. Later, you realize that you need less time for the task. Simply update it using its identifier:
@@ -78,10 +111,10 @@ You can also view your upcoming calendar events with the `list-events` command:
 
 ```sh
 reclaim list-events --future 3
-# Id      Date        Start    Dur  Type  Title
-# t3k9mw  2025-04-10  09:00   1h0m   T3   Write new blog post
-# h2plta  2025-04-10  12:30   1h0m   H1   🍕 Lunch
-# m3hsaa  2025-04-11  14:00   1h0m   M4   Team Meeting
+#     Id      Date        Start    Dur  Type  Title
+#  ●  t3k9mw  2025-04-10  09:00   1h0m   T3   Write new blog post
+#  ●  h2plta  2025-04-10  12:30   1h0m   H1   🍕 Lunch
+#  ●  m3hsaa  2025-04-11  14:00   1h0m   M4   Team Meeting
 ```
 
 Events are shown with a compact type code: `T` for tasks, `H` for habits, `M` for meetings, each followed by the priority digit. The ID column links events back to their source — task IDs can be passed to commands such as `show-task`, `edit-task`, or `start-task`, and habit IDs to `show-habit`:
