@@ -1,5 +1,6 @@
 *.egg-info
 .coverage
+.claude
 .pytest_cache
 __pycache__
 build
